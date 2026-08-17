@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown 简历 · 逐行动态列宽</title>
+    <style>
+        /* ===== Times New Roman ===== */
+        @font-face {
+            font-family: "Resume Latin";
+            src: local("Times New Roman"), local("TimesNewRomanPSMT");
+            font-style: normal;
+            font-weight: 400;
+            unicode-range: U+0020-007E, U+00A0-024F, U+2010-201F;
+        }
+        @font-face {
+            font-family: "Resume Latin";
+            src: local("Times New Roman Bold"), local("TimesNewRomanPS-BoldMT");
+            font-style: normal;
+            font-weight: 600 900;
+            unicode-range: U+0020-007E, U+00A0-024F, U+2010-201F;
+        }
+        @font-face {
+            font-family: "Resume Latin";
+            src: local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT");
+            font-style: italic;
+            font-weight: 400;
+            unicode-range: U+0020-007E, U+00A0-024F, U+2010-201F;
+        }
+        @font-face {
+            font-family: "Resume Latin";
+            src: local("Times New Roman Bold Italic"), local("TimesNewRomanPS-BoldItalicMT");
+            font-style: italic;
+            font-weight: 600 900;
+            unicode-range: U+0020-007E, U+00A0-024F, U+2010-201F;
+        }
+
+        /* ===== 页面布局 ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #eef2f6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .toolbar {
+            background: #fff;
+            padding: 10px 24px;
+            border-bottom: 1px solid #d0d7de;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+            gap: 8px;
+            z-index: 10;
+        }
+        .toolbar .brand { font-weight: 700; font-size: 18px; color: #0b1c33; display: flex; align-items: center; gap: 8px; }
+        .toolbar .actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .toolbar select {
+            padding: 5px 12px; border-radius: 6px; border: 1px solid #d0d7de;
+            background: #fff; font-size: 14px; cursor: pointer; outline: none;
+        }
+        .toolbar select:focus { border-color: #1a5cff; box-shadow: 0 0 0 2px rgba(26,92,255,0.2); }
+        .btn {
+            background: #1a5cff; color: #fff; border: none;
+            padding: 6px 18px; border-radius: 6px; font-size: 14px;
+            font-weight: 500; cursor: pointer; transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .btn:hover { background: #0d4ad9; }
+        .btn-outline { background: transparent; color: #1a5cff; border: 1px solid #1a5cff; }
+        .btn-outline:hover { background: #f0f5ff; }
+        .container {
+            display: flex; flex: 1; overflow: hidden;
+            padding: 12px; gap: 12px; background: #eef2f6; min-height: 0;
+        }
+        .editor-pane {
+            flex: 1; display: flex; flex-direction: column;
+            background: #fff; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            overflow: hidden; min-width: 0;
+        }
+        .editor-pane .header {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecf0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .editor-pane .header .title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #475467;
+        }
+        .editor-pane .header .editor-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .editor-pane .header .editor-actions .btn-sm {
+            background: transparent;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            padding: 3px 10px;
+            font-size: 12px;
+            color: #475467;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .editor-pane .header .editor-actions .btn-sm:hover {
+            background: #f0f5ff;
+            border-color: #1a5cff;
+            color: #1a5cff;
+        }
+        .editor-pane .header .editor-actions .btn-sm.copy-success {
+            border-color: #0f973d;
+            color: #0f973d;
+            background: #e8f5ee;
+        }
+
+        /* ----- 格式工具栏 ----- */
+        .format-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: #fcfcfd;
+            border-bottom: 1px solid #e9ecf0;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .format-toolbar .btn-format {
+            background: transparent;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+            line-height: 1.6;
+        }
+        .format-toolbar .btn-format:hover {
+            background: #f0f5ff;
+            border-color: #1a5cff;
+            color: #1a5cff;
+        }
+        .format-toolbar .btn-format.active {
+            background: #e8f0fe;
+            border-color: #1a5cff;
+            color: #1a5cff;
+        }
+        .format-toolbar .separator {
+            width: 1px;
+            height: 22px;
+            background: #d0d7de;
+        }
+        .format-toolbar select {
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #d0d7de;
+            background: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            outline: none;
+            font-family: inherit;
+            color: #1e293b;
+        }
+        .format-toolbar select:focus {
+            border-color: #1a5cff;
+            box-shadow: 0 0 0 2px rgba(26,92,255,0.2);
+        }
+        .format-toolbar label {
+            font-size: 12px;
+            color: #475467;
+        }
+
+        #markdown-input {
+            flex: 1; padding: 16px; border: none; outline: none; resize: none;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 14px; line-height: 1.7; color: #1e293b; background: #fff;
+            min-height: 200px;
+        }
+        .preview-pane {
+            flex: 1; display: flex; flex-direction: column;
+            background: #f4f6f9; border-radius: 12px; overflow: hidden;
+            position: relative; min-width: 0;
+        }
+        .preview-pane .header {
+            padding: 8px 16px; background: #f8f9fa;
+            border-bottom: 1px solid #e9ecf0;
+            font-size: 13px; font-weight: 500; color: #475467;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-shrink: 0;
+        }
+        .preview-pane .header .theme-indicator {
+            font-size: 12px; background: #e9ecf0;
+            padding: 2px 12px; border-radius: 12px; color: #344054;
+        }
+        #preview-scroll {
+            flex: 1; overflow: auto; padding: 20px;
+            display: flex; justify-content: center; align-items: flex-start;
+            background: #eef2f6;
+        }
+
+        /* ===== 简历页面 ===== */
+        #resume-page {
+            width: 210mm;
+            background: #fff;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+            position: relative;
+            flex-shrink: 0;
+            transition: font-family 0.2s;
+        }
+        #resume-content { box-sizing: border-box; color: #1a1a1a; }
+
+        /* ===== 主题变量 ===== */
+        #resume-page[data-theme] {
+            --page-padding-top: 4mm;
+            --page-padding-bottom: 6mm;
+            --page-padding-left: 10mm;
+            --page-padding-right: 10mm;
+            --section-gap: 0.2mm;
+            --entry-gap: 0.15mm;
+            --bullet-gap: 0.05mm;
+            --font-size-body: 10pt;
+            --font-size-small: 10pt;
+            --font-size-name: 18pt;
+            --font-size-section-title: 12pt;
+            --font-size-entry-name: 10pt;
+            --font-size-contact: 10.5pt;
+            --layout-line-height: 1.57;
+        }
+
+        #resume-page[data-theme] #resume-content {
+            padding: var(--page-padding-top) var(--page-padding-right) var(--page-padding-bottom) var(--page-padding-left);
+            font-size: var(--font-size-body);
+            line-height: var(--layout-line-height);
+            letter-spacing: -0.01em;
+        }
+
+        /* 头部 */
+        #resume-page[data-theme] #resume-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 0.8mm;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        #resume-page[data-theme] #header-info {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #resume-page[data-theme] #profile-name {
+            display: block;
+            font-size: var(--font-size-name);
+            margin: 0 0 0.8mm;
+            letter-spacing: 1px;
+            line-height: 1.12;
+            font-weight: 700;
+            font-family: inherit;
+        }
+        #resume-page[data-theme] #contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0;
+            margin: 0;
+            font-size: var(--font-size-contact);
+            line-height: var(--layout-line-height);
+        }
+        #resume-page[data-theme] .contact-item + .contact-item::before {
+            content: " | ";
+        }
+        #resume-page[data-theme] #job-target {
+            margin-top: 0;
+            font-size: var(--font-size-body);
+            color: var(--color-text, #1a1a1a);
+            font-weight: 400;
+            line-height: var(--layout-line-height);
+            max-width: 100%;
+        }
+
+        /* 版块 */
+        #resume-page[data-theme] .resume-section {
+            margin-bottom: var(--section-gap);
+            page-break-inside: avoid;
+        }
+        #resume-page[data-theme] .section-title {
+            font-size: var(--font-size-section-title);
+            margin: 0 0 0.35mm;
+            padding: 0 0 0.2mm;
+            letter-spacing: 0;
+            font-weight: 700;
+            border-bottom: 1.5px solid currentColor;
+            display: block;
+        }
+        #resume-page[data-theme] .resume-entry {
+            margin-bottom: var(--entry-gap);
+            page-break-inside: avoid;
+        }
+
+        /* ============================================================
+               核心：三栏默认 1fr 1fr 1fr，逐行动态调整
+               ============================================================ */
+
+        /* 两栏：保持 grid */
+        #resume-page[data-theme] .entry-header.two-col {
+            display: grid;
+            grid-template-columns: 4fr 1fr;
+            align-items: baseline;
+            column-gap: 2mm;
+            margin-bottom: 0.15mm;
+            line-height: 1.25;
+            width: 100%;
+        }
+        #resume-page[data-theme] .entry-header.two-col .header-item:nth-child(1) { text-align: left; }
+        #resume-page[data-theme] .entry-header.two-col .header-item:nth-child(2) { text-align: right; }
+
+        /* 三栏：默认 1:1:1，每行单独通过 inline style 调整 */
+        #resume-page[data-theme] .entry-header.three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            align-items: baseline;
+            column-gap: 2mm;
+            margin-bottom: 0.15mm;
+            line-height: 1.25;
+            width: 100%;
+        }
+
+        /* 每个栏位通用样式 */
+        #resume-page[data-theme] .entry-header .header-item {
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: var(--font-size-entry-name);
+            font-weight: 700;
+            font-synthesis: weight;
+        }
+        #resume-page[data-theme] .entry-header .header-item.date-item {
+            font-size: var(--font-size-small);
+        }
+
+        /* 三栏对齐 */
+        #resume-page[data-theme] .entry-header.three-col .header-item:nth-child(1) { text-align: left; }
+        #resume-page[data-theme] .entry-header.three-col .header-item:nth-child(2) { text-align: center; }
+        #resume-page[data-theme] .entry-header.three-col .header-item:nth-child(3) { text-align: right; }
+
+        /* ===== 列表 ===== */
+        #resume-page[data-theme] .entry-bullets,
+        #resume-page[data-theme] .skills-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #resume-page[data-theme] .entry-bullets .bullet-item,
+        #resume-page[data-theme] .skills-list .bullet-item {
+            position: relative;
+            padding-left: 4.2mm;
+            font-size: var(--font-size-body);
+            line-height: var(--layout-line-height);
+            margin-bottom: var(--bullet-gap);
+        }
+        #resume-page[data-theme] .entry-bullets .bullet-item::before,
+        #resume-page[data-theme] .skills-list .bullet-item::before {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            align-items: center;
+            height: calc(var(--font-size-body) * var(--layout-line-height));
+            line-height: 1;
+            transform: none;
+        }
+        #resume-page[data-theme] .skills-list .bullet-item {
+            padding-left: 3mm;
+        }
+
+        /* 教育条目特殊：消除项目符号 */
+        #resume-page[data-theme] .resume-section[data-section-type="education"] .entry-bullets .bullet-item {
+            padding-left: 0;
+            font-size: 9pt;
+            line-height: 1.28;
+            margin-bottom: 0;
+        }
+        #resume-page[data-theme] .resume-section[data-section-type="education"] .entry-bullets .bullet-item::before {
+            content: none;
+        }
+
+        /* 工作经验条目间距 */
+        #resume-page[data-theme] .resume-section[data-section-type="experience"] .resume-entry {
+            margin-bottom: 1.1mm;
+        }
+        #resume-page[data-theme] .resume-section[data-section-type="experience"] .resume-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ===== 分页标记 ===== */
+        .page-break-marker {
+            height: 0;
+            overflow: visible;
+            text-align: center;
+            color: #999;
+            font-size: 8pt;
+            border-bottom: 1px dashed #ccc;
+            margin: 2mm 0;
+            line-height: 0;
+            clear: both;
+            page-break-after: avoid;
+        }
+        .page-break-marker::before {
+            content: "";
+            display: inline-block;
+            height: 1.2em;
+            vertical-align: top;
+        }
+
+        /* ===== 主题颜色 ===== */
+        #resume-page[data-theme="a"] {
+            --color-text: #1a1a1a;
+            --color-muted: #4a4a4a;
+            --color-divider: #1a1a1a;
+            font-family: "Resume Latin", "Times New Roman", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        }
+        #resume-page[data-theme="a"] #resume-content { text-align: justify; text-justify: inter-ideograph; }
+        #resume-page[data-theme="a"] .section-title { border-bottom-color: var(--color-divider); color: var(--color-text); }
+        #resume-page[data-theme="a"] .entry-header .header-item { color: var(--color-text); }
+        #resume-page[data-theme="a"] .entry-bullets .bullet-item::before,
+        #resume-page[data-theme="a"] .skills-list .bullet-item::before { content: "➤"; font-size: 7pt; color: var(--color-text); }
+        #resume-page[data-theme="a"] #profile-name { color: var(--color-text); }
+        #resume-page[data-theme="a"] #contact-info { color: var(--color-text); }
+
+        #resume-page[data-theme="b"] {
+            --color-text: #1a1a1a;
+            --color-muted: #555;
+            --color-divider: #1a1a1a;
+            font-family: "Resume Latin", "Times New Roman", "SimSun", "宋体", serif;
+        }
+        #resume-page[data-theme="b"] #resume-content { text-align: justify; text-justify: inter-ideograph; }
+        #resume-page[data-theme="b"] .section-title {
+            border-bottom-color: var(--color-divider);
+            color: var(--color-text);
+            font-family: "Resume Latin", "Times New Roman", "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif;
+        }
+        #resume-page[data-theme="b"] .entry-header .header-item { color: var(--color-text); }
+        #resume-page[data-theme="b"] .entry-bullets .bullet-item::before,
+        #resume-page[data-theme="b"] .skills-list .bullet-item::before { content: "●"; font-size: 6pt; color: var(--color-text); left: 0.5mm; }
+        #resume-page[data-theme="b"] #profile-name { color: var(--color-text); }
+        #resume-page[data-theme="b"] #contact-info { color: var(--color-text); }
+        #resume-page[data-theme="b"] .contact-item + .contact-item::before { content: " ｜ "; color: var(--color-muted); }
+
+        #resume-page[data-theme="c"] {
+            --color-text: #1a1a1a;
+            --color-muted: #555;
+            --color-divider: #1a1a1a;
+            font-family: "Resume Latin", "Times New Roman", "Source Han Serif VF", "思源宋体 VF", "Noto Serif CJK SC", "SimSun", serif;
+        }
+        #resume-page[data-theme="c"] #resume-content { text-align: justify; text-justify: inter-ideograph; font-weight: 500; }
+        #resume-page[data-theme="c"] .section-title {
+            border-bottom-color: var(--color-divider);
+            color: var(--color-text);
+            font-family: "Resume Latin", "Times New Roman", "Source Han Sans VF", "思源黑体 VF", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        #resume-page[data-theme="c"] .entry-header .header-item { color: var(--color-text); }
+        #resume-page[data-theme="c"] .entry-bullets .bullet-item::before,
+        #resume-page[data-theme="c"] .skills-list .bullet-item::before { content: "●"; font-size: 6pt; color: var(--color-text); left: 0.5mm; }
+        #resume-page[data-theme="c"] #profile-name { color: var(--color-text); }
+        #resume-page[data-theme="c"] #contact-info { color: var(--color-text); }
+        #resume-page[data-theme="c"] .contact-item + .contact-item::before { content: " ｜ "; color: var(--color-muted); }
+
+        #resume-page[data-theme="d"] {
+            --color-text: #111;
+            --color-muted: #333;
+            --color-academic: #123f73;
+            --color-divider: var(--color-academic);
+            font-family: "Resume Latin", "Times New Roman", "HYQiHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+        }
+        #resume-page[data-theme="d"] #resume-content { text-align: justify; text-justify: inter-ideograph; font-weight: 400; }
+        #resume-page[data-theme="d"] .section-title {
+            border-bottom-color: var(--color-divider);
+            color: var(--color-academic);
+            font-family: "Resume Latin", "Times New Roman", "HYZhongHeiKW", "Hiragino Sans GB", "PingFang SC", sans-serif;
+        }
+        #resume-page[data-theme="d"] .entry-header .header-item { color: var(--color-academic); }
+        #resume-page[data-theme="d"] .entry-bullets .bullet-item::before {
+            content: "➤"; left: 0; font-family: Arial, sans-serif; color: var(--color-text);
+        }
+        #resume-page[data-theme="d"] .skills-list .bullet-item::before {
+            content: "•"; font-size: 7pt; font-family: "Times New Roman", serif; color: var(--color-text);
+        }
+        #resume-page[data-theme="d"] #profile-name { color: #080808; }
+        #resume-page[data-theme="d"] #contact-info {
+            color: #080808;
+            font-family: "Resume Latin", "Times New Roman", "Songti SC", serif;
+        }
+        #resume-page[data-theme="d"] .contact-item + .contact-item::before { content: " | "; color: #333; }
+        #resume-page[data-theme="d"] .resume-section[data-section-type="education"] .entry-header .header-item {
+            color: var(--color-text);
+        }
+        #resume-page[data-theme="d"] .resume-section[data-section-type="campus"] .entry-header .header-item {
+            color: var(--color-text);
+        }
+
+        /* ===== 打印样式 ===== */
+        @media print {
+            body {
+                background: #fff;
+                overflow: visible !important;
+                height: auto !important;
+            }
+            .toolbar, .editor-pane, .preview-pane .header { display: none !important; }
+            .container {
+                padding: 0 !important;
+                background: #fff !important;
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+            .preview-pane {
+                border-radius: 0 !important;
+                background: #fff !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+            #preview-scroll {
+                padding: 0 !important;
+                background: #fff !important;
+                display: block !important;
+                overflow: visible !important;
+                height: auto !important;
+            }
+            #resume-page {
+                box-shadow: none !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+                page-break-after: auto;
+            }
+            #resume-page[data-theme] #resume-content {
+                padding: var(--page-padding-top) var(--page-padding-right) var(--page-padding-bottom) var(--page-padding-left);
+            }
+            .resume-section { page-break-inside: avoid; }
+            .resume-entry { page-break-inside: avoid; }
+            .page-break-marker { display: none !important; }
+            @page { size: A4; margin: 0; }
+        }
+
+        @media (max-width: 760px) {
+            .container { flex-direction: column; padding: 8px; }
+            .editor-pane { min-height: 40vh; }
+            #resume-page { width: 100%; }
+        }
+
+        /* ===== Modal 样式 ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(2px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 780px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid #e9ecf0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            background: #fafbfc;
+        }
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0b1c33;
+            margin: 0;
+        }
+        .modal-header .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            padding: 0 4px;
+            line-height: 1;
+            transition: color 0.15s;
+        }
+        .modal-header .modal-close:hover {
+            color: #1a1a1a;
+        }
+        .modal-body {
+            padding: 24px 28px;
+            overflow-y: auto;
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #1e293b;
+        }
+        .modal-body h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0b1c33;
+            margin: 18px 0 6px 0;
+        }
+        .modal-body h3:first-of-type {
+            margin-top: 0;
+        }
+        .modal-body .code-block {
+            background: #f1f4f9;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            color: #1e293b;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 6px 0 12px 0;
+            border: 1px solid #e9ecf0;
+        }
+        .modal-body .code-block .highlight {
+            background: #fef3c7;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        .modal-body .note {
+            background: #f0f7ff;
+            border-left: 4px solid #1a5cff;
+            padding: 10px 16px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: #1e293b;
+        }
+        .modal-body .note strong {
+            color: #1a5cff;
+        }
+        .modal-footer {
+            padding: 14px 24px;
+            border-top: 1px solid #e9ecf0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+            background: #fafbfc;
+        }
+        .modal-footer .btn {
+            padding: 6px 20px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 顶部导航栏 ===== -->
+    <div class="toolbar">
+        <div class="brand">📄 Markdown 简历 · 逐行动态列宽</div>
+        <div class="actions">
+            <button class="btn btn-outline" onclick="openModal()">📋 格式规范</button>
+            <span style="font-size:14px; color:#475467;">主题</span>
+            <select id="themeSelector">
+                <option value="a">A – 现代简洁</option>
+                <option value="b">B – 古典宋体</option>
+                <option value="c">C – 思源宋体</option>
+                <option value="d" selected>D – 蓝黑学术</option>
+            </select>
+            <button class="btn btn-outline" onclick="loadExample()">📝 示例</button>
+            <button class="btn" onclick="window.print()">🖨️ 打印 / PDF</button>
+        </div>
+    </div>
+
+    <!-- ===== 主体 ===== -->
+    <div class="container">
+        <!-- 左侧编辑区 -->
+        <div class="editor-pane">
+            <div class="header">
+                <span class="title">✏️ Markdown 源码</span>
+                <div class="editor-actions">
+                    <button class="btn-sm" id="undoBtn" onclick="undo()" title="撤回 (Ctrl+Z)">↩️ 撤回</button>
+                    <button class="btn-sm" id="redoBtn" onclick="redo()" title="重做 (Ctrl+Y)">↪️ 重做</button>
+                    <button class="btn-sm" id="copyMdBtn" onclick="copyMarkdown()">📋 复制</button>
+                    <button class="btn-sm" onclick="downloadMarkdown()">⬇️ 下载 .md</button>
+                </div>
+            </div>
+
+            <!-- 格式工具栏 -->
+            <div class="format-toolbar">
+                <button class="btn-format" id="boldBtn" onclick="wrapBold()" title="加粗 (Ctrl+B)"><strong>B</strong></button>
+                <button class="btn-format" id="italicBtn" onclick="wrapItalic()" title="斜体 (Ctrl+I)"><em>I</em></button>
+                <span class="separator"></span>
+                <label>字体</label>
+                <select id="fontFamilySelect" onchange="applyFontFamily()">
+                    <option value="">默认</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="Arial, sans-serif">Arial</option>
+                    <option value="Georgia, serif">Georgia</option>
+                    <option value="'Courier New', monospace">Courier New</option>
+                    <option value="'PingFang SC', 'Microsoft YaHei', sans-serif">PingFang / 微软雅黑</option>
+                    <option value="'SimSun', serif">宋体</option>
+                    <option value="'SimHei', sans-serif">黑体</option>
+                    <option value="'KaiTi', serif">楷体</option>
+                </select>
+                <span class="separator"></span>
+                <label>字号</label>
+                <select id="fontSizeSelect" onchange="applyFontSize()">
+                    <option value="">默认</option>
+                    <option value="9pt">9pt</option>
+                    <option value="10pt">10pt</option>
+                    <option value="11pt">11pt</option>
+                    <option value="12pt">12pt</option>
+                    <option value="14pt">14pt</option>
+                    <option value="16pt">16pt</option>
+                    <option value="18pt">18pt</option>
+                    <option value="20pt">20pt</option>
+                    <option value="24pt">24pt</option>
+                </select>
+            </div>
+
+            <textarea id="markdown-input" placeholder="按格式粘贴..."></textarea>
+        </div>
+
+        <!-- 右侧预览区 -->
+        <div class="preview-pane">
+            <div class="header">
+                <span>👁️ A4 预览（虚线为分页）</span>
+                <span class="theme-indicator" id="themeIndicator">主题 D</span>
+            </div>
+            <div id="preview-scroll">
+                <div id="resume-page" data-theme="d">
+                    <div id="resume-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Modal ===== -->
+    <div class="modal-overlay" id="formatModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>📋 Markdown 格式规范</h2>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 由 JavaScript 动态渲染 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="copyFormatSpec()">📋 复制全部规范</button>
+                <button class="btn btn-outline" onclick="closeModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const textarea = document.getElementById('markdown-input');
+            const resumeContent = document.getElementById('resume-content');
+            const resumePage = document.getElementById('resume-page');
+            const themeSelector = document.getElementById('themeSelector');
+            const themeIndicator = document.getElementById('themeIndicator');
+            const modalBody = document.getElementById('modalBody');
+
+            // ===== 撤回/重做系统 =====
+            let history = [];
+            let historyIndex = -1;
+            const MAX_HISTORY = 200;
+            let isUndoRedo = false;
+
+            function saveHistory() {
+                if (isUndoRedo) return;
+                const current = textarea.value;
+                // 如果当前值与历史最后一条相同，不重复保存
+                if (history.length > 0 && history[historyIndex] === current) return;
+                // 如果当前索引不在最后，丢弃后面的历史
+                if (historyIndex < history.length - 1) {
+                    history = history.slice(0, historyIndex + 1);
+                }
+                history.push(current);
+                if (history.length > MAX_HISTORY) {
+                    history.shift();
+                }
+                historyIndex = history.length - 1;
+                updateUndoRedoButtons();
+            }
+
+            function updateUndoRedoButtons() {
+                document.getElementById('undoBtn').style.opacity = historyIndex > 0 ? '1' : '0.3';
+                document.getElementById('redoBtn').style.opacity = historyIndex < history.length - 1 ? '1' : '0.3';
+            }
+
+            window.undo = function() {
+                if (historyIndex > 0) {
+                    isUndoRedo = true;
+                    historyIndex--;
+                    textarea.value = history[historyIndex];
+                    textarea.dispatchEvent(new Event('input'));
+                    isUndoRedo = false;
+                    updateUndoRedoButtons();
+                }
+            };
+
+            window.redo = function() {
+                if (historyIndex < history.length - 1) {
+                    isUndoRedo = true;
+                    historyIndex++;
+                    textarea.value = history[historyIndex];
+                    textarea.dispatchEvent(new Event('input'));
+                    isUndoRedo = false;
+                    updateUndoRedoButtons();
+                }
+            };
+
+            // 键盘快捷键
+            document.addEventListener('keydown', function(e) {
+                const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                const ctrl = isMac ? e.metaKey : e.ctrlKey;
+                if (ctrl && e.key === 'z' && !e.shiftKey) {
+                    e.preventDefault();
+                    undo();
+                } else if (ctrl && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+                    e.preventDefault();
+                    redo();
+                }
+                // Ctrl+B / Ctrl+I 用于加粗斜体（暂不实现浏览器默认行为拦截，因为我们需要自定义）
+                // 但为了避免干扰，让用户使用工具栏即可
+            });
+
+            // 在输入时保存历史（用防抖避免频繁保存）
+            let saveTimer;
+            textarea.addEventListener('input', function() {
+                // 先渲染（在保存前，让预览同步）
+                render();
+                // 延迟保存历史，避免每次按键都保存（但用户希望每步都能撤回）
+                clearTimeout(saveTimer);
+                saveTimer = setTimeout(function() {
+                    saveHistory();
+                }, 100);
+            });
+
+            // 初始化保存
+            setTimeout(saveHistory, 100);
+
+            // ---------- 工具：去除所有行首空格 ----------
+            function trimLines(str) {
+                return str.replace(/^[ \t]+/gm, '');
+            }
+
+            // ---------- 格式规范内容 ----------
+            const formatSpec = trimLines(`
+                <h3>📌 头部信息</h3>
+                <div class="code-block"># 你的姓名
+                电话: xxx | 邮箱: xxx | 地址: xxx
+                求职方向：目标岗位 / 职业方向</div>
+                <p style="font-size:13px; color:#666; margin-top:-6px;">联系方式用 <strong>|</strong> 分隔，求职方向单独一行。</p>
+
+                <h3>📌 一级标题（版块名称）</h3>
+                <div class="code-block"># 教育背景
+                # 工作经历
+                # 项目经历</div>
+
+                <h3>📌 二级标题（条目）</h3>
+                <p style="font-size:13px; color:#666; margin-bottom:4px;">使用 <strong>|</strong>（<span class="highlight">英文半角竖线</span>）分隔各栏，自动识别为两栏或三栏：</p>
+                <div class="code-block"><span style="color:#0f973d;">// 两栏（名称 + 时间）</span>
+                ## 学生会主席 | 2023 – 2024
+
+                <span style="color:#0f973d;">// 三栏（名称 + 角色 + 时间）</span>
+                ## 复旦大学 | 计算机科学硕士 | 2023 – 2026</div>
+
+                <h3>📌 列表项（描述内容）</h3>
+                <div class="code-block">- 负责活动策划与执行，参与人数 200+
+                - 统筹宣传矩阵，公众号粉丝增长 35%</div>
+
+                <div class="note">
+                    <strong>⚠️ 关键规则：</strong><br>
+                    • 二级标题中的分隔符 <strong>|</strong> 必须是 <strong>英文半角</strong> 竖线（Shift + \\）<br>
+                    • 二级标题有 2 段 → 自动识别为 <strong>两栏</strong>（名称左对齐，时间右对齐）<br>
+                    • 二级标题有 ≥3 段 → 自动识别为 <strong>三栏</strong>（左、中、右对齐）<br>
+                    • 列表项以 <code>-</code> 或 <code>*</code> 开头
+                </div>
+
+                <h3>📌 完整示例</h3>
+                <div class="code-block"># 张三
+                电话: 138-0000-0000 | 邮箱: san.zhang@email.com | 地址: 北京
+                求职方向：全栈开发工程师
+
+                # 教育背景
+                ## 北京大学 | 计算机科学硕士 | 2022 – 2025
+                - 研究方向：分布式系统
+                - GPA: 3.8/4.0
+
+                # 工作经历
+                ## 字节跳动 | 高级全栈工程师 | 2022 – 至今
+                - 主导电商后台重构，接口响应时间降低 40%
+
+                # 专业技能
+                - 前端: React, Vue, TypeScript
+                - 后端: Node.js, Java, Python</div>
+            `);
+
+            // ---------- 示例内容 ----------
+            const exampleContent = trimLines(`
+                # 陈思远
+                电话: 139-8888-1234 | 邮箱: siyuan.chen@outlook.com | 地址: 杭州
+                求职方向：数据分析师 / 产品经理
+
+                # 教育背景
+                ## University of Cambridge | Master of Philosophy in Data Science | Oct 2023 – Sep 2024
+                - 研究方向：机器学习与因果推断
+                - 毕业论文获系优秀论文提名
+                ## London School of Economics | Bachelor of Science in Economics | Sep 2019 – Jun 2023
+                - 一等荣誉学位 (First Class Honours)
+                - 核心课程：计量经济学、行为经济学、运筹学
+
+                # 校园经历
+                ## 剑桥中国学联 | 副主席 | Oct 2023 – Sep 2024
+                - 策划并执行 8 场学术讲座与职业分享会，累计参与 500+ 人次
+                - 统筹学联宣传矩阵，公众号粉丝增长 35%
+                ## LSE 经济学社 | 学术部部长 | Sep 2021 – Jun 2023
+                - 组织 12 场学术沙龙，邀请教授与业界嘉宾共 9 人
+                - 主编学社年刊，收录论文 15 篇
+
+                # 实习经历
+                ## McKinsey & Company | 战略咨询实习生 | Jun 2024 – Sep 2024
+                - 参与某消费品牌数字化转型项目，协助完成市场调研与竞品分析
+                - 基于 Python 处理 10 万+ 条销售数据，输出可视化看板
+                ## L'Oréal China | 市场分析实习生 | Dec 2023 – Feb 2024
+                - 协助跟进 2024 年货节活动，参与定价策略与流量监测
+                - 利用 SQL 提取用户行为数据，输出周报驱动运营决策
+                ## 招商证券 | 行业研究实习生 | Jul 2022 – Sep 2022
+                - 覆盖消费品与零售赛道，协助撰写 3 份深度行业研究报告
+                - 负责数据收集与更新，搭建财务预测模型
+
+                # 项目经历
+                ## Carbon Footprint Tracker App | 产品设计负责人 | Jan 2025 – Apr 2025
+                - 设计并开发碳足迹追踪工具，集成用户出行与消费数据
+                - 完成用户调研与原型测试，累计收集有效问卷 200+ 份
+                ## E-commerce Recommendation System | 项目成员 | Oct 2023 – Dec 2023
+                - 基于协同过滤与 LightGBM 构建电商推荐模型，AUC 达 0.87
+                - 撰写项目白皮书，获学院科研展示日最佳展示奖
+
+                # 专业技能
+                - 数据分析: Python, R, SQL, Tableau
+                - 产品工具: Figma, Miro, Notion, Jira
+                - 语言: 中文 (母语), 英语 (IELTS 8.0), 法语 (基础)
+            `);
+
+            // ---------- 解析器 ----------
+            function parseMarkdown(md) {
+                const lines = md.split('\n');
+                let result = {
+                    name: '',
+                    contactItems: [],
+                    jobTargetLines: [],
+                    sections: []
+                };
+
+                let i = 0;
+                let foundName = false;
+                let foundContact = false;
+                let contactLine = '';
+
+                // 1. 提取头部
+                for (; i < lines.length; i++) {
+                    const trimmed = lines[i].trim();
+                    if (!foundName && trimmed.startsWith('# ') && !trimmed.startsWith('## ')) {
+                        result.name = trimmed.substring(2).trim();
+                        foundName = true;
+                        continue;
+                    }
+                    if (foundName && !foundContact) {
+                        if (trimmed === '') continue;
+                        if (trimmed.startsWith('#') || trimmed.startsWith('-') || trimmed.startsWith('*')) break;
+                        contactLine = trimmed;
+                        foundContact = true;
+                        for (let j = i + 1; j < lines.length; j++) {
+                            const next = lines[j].trim();
+                            if (next === '') continue;
+                            if (next.startsWith('#') || next.startsWith('-') || next.startsWith('*')) break;
+                            result.jobTargetLines.push(next);
+                        }
+                        break;
+                    }
+                }
+
+                if (!result.name) result.name = '姓名';
+                if (contactLine) {
+                    result.contactItems = contactLine.split('|').map(s => s.trim()).filter(s => s);
+                }
+                if (result.contactItems.length === 0) result.contactItems = ['电话', '邮箱', '地址'];
+
+                // 2. 解析主体 sections
+                let currentSection = null;
+                let currentEntry = null;
+
+                function isH1(line) { return /^#\s+\S/.test(line.trim()) && !/^##\s+/.test(line.trim()); }
+                function isH2(line) { return /^##\s+\S/.test(line.trim()); }
+                function isBullet(line) { return /^[-*]\s+/.test(line.trim()); }
+
+                function parseH2(line) {
+                    const content = line.replace(/^##\s+/, '').trim();
+                    return content.split('|').map(s => s.trim());
+                }
+
+                let startIdx = i;
+                for (let idx = startIdx; idx < lines.length; idx++) {
+                    const line = lines[idx];
+                    const trimmed = line.trim();
+
+                    if (isH1(line)) {
+                        if (currentSection) {
+                            if (currentEntry) { currentSection.entries.push(currentEntry); currentEntry = null; }
+                            result.sections.push(currentSection);
+                        }
+                        const title = trimmed.substring(2).trim();
+                        let type = 'default';
+                        const lower = title.toLowerCase();
+                        if (lower.includes('教育') || lower.includes('education')) type = 'education';
+                        else if (lower.includes('校园') || lower.includes('campus')) type = 'campus';
+                        else if (lower.includes('实习') || lower.includes('intern')) type = 'internship';
+                        else if (lower.includes('工作') || lower.includes('经历') || lower.includes('经验') || lower.includes(
+                            'experience')) type = 'experience';
+                        currentSection = { title, type, entries: [] };
+                        continue;
+                    }
+
+                    if (isH2(line)) {
+                        if (currentEntry && currentSection) {
+                            currentSection.entries.push(currentEntry);
+                            currentEntry = null;
+                        }
+                        const fields = parseH2(line);
+                        currentEntry = { fields, bullets: [] };
+                        continue;
+                    }
+
+                    if (isBullet(line)) {
+                        if (!currentEntry) { currentEntry = { fields: [], bullets: [] }; }
+                        const bulletText = trimmed.replace(/^[-*]\s+/, '').trim();
+                        currentEntry.bullets.push({ text: bulletText });
+                        continue;
+                    }
+                }
+
+                if (currentSection) {
+                    if (currentEntry) { currentSection.entries.push(currentEntry); }
+                    result.sections.push(currentSection);
+                }
+
+                return result;
+            }
+
+            // ---------- 分页标记插入 ----------
+            function insertPageBreaks() {
+                const content = document.getElementById('resume-content');
+                if (!content) return;
+                document.querySelectorAll('.page-break-marker').forEach(el => el.remove());
+
+                const page = document.getElementById('resume-page');
+                const style = getComputedStyle(page);
+                const paddingTop = parseFloat(style.paddingTop) || 0;
+                const paddingBottom = parseFloat(style.paddingBottom) || 0;
+
+                const rect = page.getBoundingClientRect();
+                if (rect.width === 0) return;
+                const mmToPx = rect.width / 210;
+                const pageHeightPx = 297 * mmToPx;
+                const effectiveHeight = pageHeightPx - (paddingTop + paddingBottom) * mmToPx;
+
+                const children = Array.from(content.children);
+                let accumulatedHeight = 0;
+                let pageNum = 1;
+
+                for (let i = 0; i < children.length; i++) {
+                    const child = children[i];
+                    const childHeight = child.offsetHeight;
+                    const marginTop = parseFloat(getComputedStyle(child).marginTop) || 0;
+                    const marginBottom = parseFloat(getComputedStyle(child).marginBottom) || 0;
+                    const totalHeight = childHeight + marginTop + marginBottom;
+
+                    if (accumulatedHeight + totalHeight > effectiveHeight && accumulatedHeight > 0) {
+                        const marker = document.createElement('div');
+                        marker.className = 'page-break-marker';
+                        marker.textContent = `—— 第 ${pageNum} 页 ——`;
+                        content.insertBefore(marker, child);
+                        pageNum++;
+                        accumulatedHeight = totalHeight;
+                    } else {
+                        accumulatedHeight += totalHeight;
+                    }
+                }
+            }
+
+            // ---------- 核心：逐行动态调整列宽 ----------
+            function adjustColumnWidths() {
+                const threeColHeaders = document.querySelectorAll('.entry-header.three-col');
+                threeColHeaders.forEach(header => {
+                    header.style.gridTemplateColumns = '1fr 1fr 1fr';
+                    void header.offsetHeight;
+
+                    const items = header.querySelectorAll('.header-item');
+                    if (items.length < 3) return;
+
+                    const col1 = items[0];
+                    const col2 = items[1];
+
+                    const col1Overflow = col1.scrollWidth > col1.clientWidth + 2;
+                    const col2Overflow = col2.scrollWidth > col2.clientWidth + 2;
+
+                    if (col1Overflow && col2Overflow) {
+                        header.style.gridTemplateColumns = '1.8fr 1.8fr 1fr';
+                    } else if (col1Overflow) {
+                        header.style.gridTemplateColumns = '1.2fr 1fr 1fr';
+                    } else if (col2Overflow) {
+                        header.style.gridTemplateColumns = '1.8fr 2.8fr 1fr';
+                    }
+                });
+            }
+
+            // ---------- 渲染 ----------
+            function render() {
+                const md = textarea.value;
+                const parsed = parseMarkdown(md);
+
+                let headerHTML = `
+                    <div id="resume-header">
+                        <div id="header-info">
+                            <div id="profile-name">${parsed.name}</div>
+                            <div id="contact-info">
+                                ${parsed.contactItems.map(item => `<span class="contact-item">${item}</span>`).join('')}
+                            </div>
+                            ${parsed.jobTargetLines.length ? `<div id="job-target">${parsed.jobTargetLines.join(' ')}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                let sectionsHTML = '';
+                for (const sec of parsed.sections) {
+                    sectionsHTML += `<div class="resume-section" data-section-type="${sec.type}">`;
+                    sectionsHTML += `<div class="section-title">${sec.title}</div>`;
+                    for (const entry of sec.entries) {
+                        const fields = entry.fields;
+                        let colClass, items;
+                        if (fields.length === 2) {
+                            colClass = 'two-col';
+                            items = [fields[0] || '', fields[1] || ''];
+                        } else if (fields.length >= 3) {
+                            colClass = 'three-col';
+                            items = [fields[0] || '', fields[1] || '', fields[2] || ''];
+                        } else {
+                            colClass = 'three-col';
+                            items = [fields[0] || '', '', ''];
+                        }
+
+                        sectionsHTML += `<div class="resume-entry">`;
+                        sectionsHTML += `<div class="entry-header ${colClass}">`;
+                        for (let idx = 0; idx < items.length; idx++) {
+                            const isLast = (idx === items.length - 1);
+                            const cls = isLast ? 'header-item date-item' : 'header-item';
+                            sectionsHTML += `<span class="${cls}">${items[idx]}</span>`;
+                        }
+                        sectionsHTML += `</div>`;
+
+                        if (entry.bullets && entry.bullets.length) {
+                            sectionsHTML += `<ul class="entry-bullets">`;
+                            for (const b of entry.bullets) {
+                                sectionsHTML += `<li class="bullet-item">${b.text}</li>`;
+                            }
+                            sectionsHTML += `</ul>`;
+                        }
+                        sectionsHTML += `</div>`;
+                    }
+                    sectionsHTML += `</div>`;
+                }
+
+                resumeContent.innerHTML = headerHTML + sectionsHTML;
+
+                const theme = themeSelector.value;
+                const themeNames = { a: 'A – 现代简洁', b: 'B – 古典宋体', c: 'C – 思源宋体', d: 'D – 蓝黑学术' };
+                themeIndicator.textContent = themeNames[theme] || theme;
+
+                requestAnimationFrame(() => {
+                    adjustColumnWidths();
+                    setTimeout(() => {
+                        adjustColumnWidths();
+                        insertPageBreaks();
+                    }, 20);
+                });
+            }
+
+            // ---------- 主题切换 ----------
+            function setTheme(theme) {
+                resumePage.setAttribute('data-theme', theme);
+                themeSelector.value = theme;
+                render();
+            }
+
+            // ---------- 加载示例 ----------
+            function loadExample() {
+                textarea.value = exampleContent;
+                // 重置历史
+                history = [];
+                historyIndex = -1;
+                saveHistory();
+                render();
+            }
+
+            // ---------- 复制 Markdown 内容 ----------
+            window.copyMarkdown = function() {
+                const content = textarea.value;
+                if (!content) {
+                    alert('编辑区为空，没有内容可复制。');
+                    return;
+                }
+                navigator.clipboard.writeText(content).then(() => {
+                    const btn = document.getElementById('copyMdBtn');
+                    btn.textContent = '✅ 已复制';
+                    btn.classList.add('copy-success');
+                    setTimeout(() => {
+                        btn.textContent = '📋 复制';
+                        btn.classList.remove('copy-success');
+                    }, 2000);
+                }).catch(() => {
+                    const textarea = document.getElementById('markdown-input');
+                    textarea.select();
+                    document.execCommand('copy');
+                    const btn = document.getElementById('copyMdBtn');
+                    btn.textContent = '✅ 已复制';
+                    btn.classList.add('copy-success');
+                    setTimeout(() => {
+                        btn.textContent = '📋 复制';
+                        btn.classList.remove('copy-success');
+                    }, 2000);
+                });
+            };
+
+            // ---------- 下载为 .md 文件 ----------
+            window.downloadMarkdown = function() {
+                const content = textarea.value;
+                if (!content) {
+                    alert('编辑区为空，无法下载。');
+                    return;
+                }
+                const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'resume.md';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+
+            // ---------- Modal 控制 ----------
+            window.openModal = function() {
+                document.getElementById('formatModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+            window.closeModal = function() {
+                document.getElementById('formatModal').classList.remove('active');
+                document.body.style.overflow = '';
+            };
+
+            document.getElementById('formatModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // ---------- 复制格式规范 ----------
+            window.copyFormatSpec = function() {
+                const el = document.getElementById('modalBody');
+                const text = el.innerText || el.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = document.querySelector('.modal-footer .btn:first-child');
+                    const orig = btn.textContent;
+                    btn.textContent = '✅ 已复制';
+                    setTimeout(() => { btn.textContent = orig; }, 2000);
+                }).catch(() => {
+                    const range = document.createRange();
+                    range.selectNode(el);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    document.execCommand('copy');
+                    window.getSelection().removeAllRanges();
+                    const btn = document.querySelector('.modal-footer .btn:first-child');
+                    const orig = btn.textContent;
+                    btn.textContent = '✅ 已复制';
+                    setTimeout(() => { btn.textContent = orig; }, 2000);
+                });
+            };
+
+            // ---------- 格式工具栏函数（加粗/斜体使用 HTML 标签） ----------
+            function wrapWithTags(openTag, closeTag) {
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                if (start === end) {
+                    alert('请先选中要修改的文本。');
+                    return;
+                }
+                const selected = textarea.value.substring(start, end);
+                let newText;
+                // 检查是否已经被同样的标签包裹（切换效果）
+                const regex = new RegExp(`^${openTag}(.*)${closeTag}$`, 's');
+                const match = selected.match(regex);
+                if (match) {
+                    newText = match[1];
+                } else {
+                    newText = openTag + selected + closeTag;
+                }
+                textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+                textarea.selectionStart = start;
+                textarea.selectionEnd = start + newText.length;
+                textarea.focus();
+                render();
+                // 保存历史
+                clearTimeout(saveTimer);
+                saveTimer = setTimeout(saveHistory, 100);
+            }
+
+            window.wrapBold = function() {
+                wrapWithTags('<strong>', '</strong>');
+            };
+
+            window.wrapItalic = function() {
+                wrapWithTags('<em>', '</em>');
+            };
+
+            // 应用字体样式（覆盖已有的 font-family）
+            window.applyFontFamily = function() {
+                const select = document.getElementById('fontFamilySelect');
+                const font = select.value;
+                if (!font) {
+                    removeStyleFromSelection('font-family');
+                    return;
+                }
+                applySpanStyle('font-family', font);
+            };
+
+            // 应用字号（覆盖已有的 font-size）
+            window.applyFontSize = function() {
+                const select = document.getElementById('fontSizeSelect');
+                const size = select.value;
+                if (!size) {
+                    removeStyleFromSelection('font-size');
+                    return;
+                }
+                applySpanStyle('font-size', size);
+            };
+
+            // 通用函数：为选中文本包裹 <span style="property: value;">，如果已有则覆盖
+            function applySpanStyle(property, value) {
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                if (start === end) {
+                    alert('请先选中要修改的文本。');
+                    return;
+                }
+                const selected = textarea.value.substring(start, end);
+                const spanRegex = /^<span style="([^"]*)">(.*)<\/span>$/s;
+                const match = selected.match(spanRegex);
+                let newText;
+                if (match) {
+                    let style = match[1];
+                    const inner = match[2];
+                    const propRegex = new RegExp(`${property}\\s*:\\s*[^;]+;?`);
+                    if (propRegex.test(style)) {
+                        style = style.replace(propRegex, `${property}: ${value};`);
+                    } else {
+                        style = style + (style.endsWith(';') ? '' : ';') + ` ${property}: ${value};`;
+                    }
+                    newText = `<span style="${style}">${inner}</span>`;
+                } else {
+                    newText = `<span style="${property}: ${value};">${selected}</span>`;
+                }
+                textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+                textarea.selectionStart = start;
+                textarea.selectionEnd = start + newText.length;
+                textarea.focus();
+                render();
+                clearTimeout(saveTimer);
+                saveTimer = setTimeout(saveHistory, 100);
+            }
+
+            // 从选中文本中移除指定 CSS 属性
+            function removeStyleFromSelection(property) {
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                if (start === end) {
+                    alert('请先选中要修改的文本。');
+                    return;
+                }
+                const selected = textarea.value.substring(start, end);
+                const spanRegex = /^<span style="([^"]*)">(.*)<\/span>$/s;
+                const match = selected.match(spanRegex);
+                if (!match) {
+                    alert('当前选中的文本没有样式可移除。');
+                    return;
+                }
+                let style = match[1];
+                const inner = match[2];
+                const propRegex = new RegExp(`${property}\\s*:\\s*[^;]+;?`);
+                style = style.replace(propRegex, '').replace(/;;/g, ';').replace(/;\s*$/, '');
+                let newText;
+                if (style.trim() === '') {
+                    newText = inner;
+                } else {
+                    newText = `<span style="${style}">${inner}</span>`;
+                }
+                textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+                textarea.selectionStart = start;
+                textarea.selectionEnd = start + newText.length;
+                textarea.focus();
+                render();
+                clearTimeout(saveTimer);
+                saveTimer = setTimeout(saveHistory, 100);
+            }
+
+            // ---------- 初始化 ----------
+            modalBody.innerHTML = formatSpec;
+            loadExample();
+            setTheme('d');
+
+            window.loadExample = loadExample;
+
+            // ---------- 事件绑定 ----------
+            textarea.addEventListener('input', function() {
+                // input 事件中只负责触发渲染和保存历史（由上面的监听器处理）
+                // 但为了防冲突，这里只调用渲染
+                // 历史保存由独立的 input 监听器处理
+            });
+
+            themeSelector.addEventListener('change', function(e) {
+                setTheme(e.target.value);
+            });
+
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    adjustColumnWidths();
+                    insertPageBreaks();
+                }, 200);
+            });
+
+        })();
+    </script>
+
+</body>
+</html>
