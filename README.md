@@ -6,9 +6,9 @@
 
 ## 🌐 在线访问
 
-**中文**：点击链接直接使用 → [https://Lorna-Y.github.io/markdown-resume/](https://Lorna-Y.github.io/markdown-resume/)
+点击链接直接使用 → [https://Lorna-Y.github.io/markdown-resume/](https://Lorna-Y.github.io/markdown-resume/)
 
-**English**: Click the link to use directly → [https://Lorna-Y.github.io/markdown-resume/](https://Lorna-Y.github.io/markdown-resume/)
+Click the link to use directly → [https://Lorna-Y.github.io/markdown-resume/](https://Lorna-Y.github.io/markdown-resume/)
 
 ---
 
@@ -37,7 +37,7 @@
 3. 使用顶部的 **“主题”** 下拉菜单切换不同风格。  
 4. 点击 **“格式规范”** 按钮查看详细的 Markdown 语法说明。  
 5. 完成后点击 **“打印 / PDF”** 按钮导出为纸质简历或 PDF 文件。
-
+- 
 1. Edit the Markdown source in the left panel.  
 2. The right preview pane updates instantly to show your resume.  
 3. Use the **“Theme”** dropdown to switch visual styles.  
