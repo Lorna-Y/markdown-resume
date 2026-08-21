@@ -123,6 +123,11 @@
             color: #0f973d;
             background: #e8f5ee;
         }
+        .editor-pane .header .editor-actions .btn-sm:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
 
         /* ----- 格式工具栏 ----- */
         .format-toolbar {
@@ -564,7 +569,7 @@
             #resume-page { width: 100%; }
         }
 
-        /* ===== Modal 样式 ===== */
+        /* ===== Modal 样式（升级版） ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -582,16 +587,16 @@
         .modal-box {
             background: #fff;
             border-radius: 16px;
-            max-width: 780px;
+            max-width: 820px;
             width: 100%;
-            max-height: 90vh;
+            max-height: 92vh;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
         }
         .modal-header {
-            padding: 18px 24px;
+            padding: 16px 24px;
             border-bottom: 1px solid #e9ecf0;
             display: flex;
             justify-content: space-between;
@@ -618,13 +623,59 @@
         .modal-header .modal-close:hover {
             color: #1a1a1a;
         }
+
+        /* ===== Modal 导航栏 ===== */
+        .modal-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: #f8f9fc;
+            border-bottom: 1px solid #e9ecf0;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .modal-nav .nav-btn {
+            background: transparent;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 4px 14px;
+            font-size: 13px;
+            color: #475467;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .modal-nav .nav-btn:hover {
+            background: #f0f5ff;
+            border-color: #1a5cff;
+            color: #1a5cff;
+        }
+        .modal-nav .nav-btn.active-nav {
+            background: #e8f0fe;
+            border-color: #1a5cff;
+            color: #1a5cff;
+        }
+        .modal-nav .nav-divider {
+            width: 1px;
+            height: 20px;
+            background: #d0d7de;
+        }
+        .modal-nav .nav-hint {
+            font-size: 12px;
+            color: #999;
+            margin-left: auto;
+        }
+
         .modal-body {
             padding: 24px 28px;
             overflow-y: auto;
             flex: 1;
             font-size: 14px;
-            line-height: 1.7;
+            line-height: 1.8;
             color: #1e293b;
+            scroll-behavior: smooth;
         }
         .modal-body h3 {
             font-size: 15px;
@@ -666,6 +717,60 @@
         .modal-body .note strong {
             color: #1a5cff;
         }
+
+        /* ===== AI Prompt 高亮区域 ===== */
+        .ai-prompt-section {
+            background: #fafbfc;
+            border: 2px solid #1a5cff;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0 10px 0;
+            position: relative;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .ai-prompt-section.highlight-flash {
+            background: #fef9e7;
+            box-shadow: 0 0 0 4px rgba(26,92,255,0.15);
+        }
+        .ai-prompt-section .section-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .ai-prompt-section .section-label .label-text {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a5cff;
+        }
+        .ai-prompt-section .section-label .copy-ai-btn {
+            background: transparent;
+            border: 1px solid #1a5cff;
+            border-radius: 4px;
+            padding: 2px 12px;
+            font-size: 12px;
+            color: #1a5cff;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .ai-prompt-section .section-label .copy-ai-btn:hover {
+            background: #e8f0fe;
+        }
+        .ai-prompt-section .section-label .copy-ai-btn.copied {
+            border-color: #0f973d;
+            color: #0f973d;
+            background: #e8f5ee;
+        }
+        .ai-prompt-section .ai-note {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #1e293b;
+        }
+        .ai-prompt-section .ai-note li {
+            margin-bottom: 4px;
+        }
+
         .modal-footer {
             padding: 14px 24px;
             border-top: 1px solid #e9ecf0;
@@ -678,6 +783,11 @@
         .modal-footer .btn {
             padding: 6px 20px;
             font-size: 13px;
+        }
+
+        /* 滚动锚点偏移（让标题不被导航栏挡住） */
+        .scroll-anchor {
+            scroll-margin-top: 20px;
         }
     </style>
 </head>
@@ -716,8 +826,8 @@
 
             <!-- 格式工具栏 -->
             <div class="format-toolbar">
-                <button class="btn-format" id="boldBtn" onclick="wrapBold()" title="加粗 (Ctrl+B)"><strong>B</strong></button>
-                <button class="btn-format" id="italicBtn" onclick="wrapItalic()" title="斜体 (Ctrl+I)"><em>I</em></button>
+                <button class="btn-format" id="boldBtn" onclick="wrapBold()" title="加粗"><strong>B</strong></button>
+                <button class="btn-format" id="italicBtn" onclick="wrapItalic()" title="斜体"><em>I</em></button>
                 <span class="separator"></span>
                 <label>字体</label>
                 <select id="fontFamilySelect" onchange="applyFontFamily()">
@@ -764,18 +874,28 @@
         </div>
     </div>
 
-    <!-- ===== Modal ===== -->
+    <!-- ===== Modal（升级版） ===== -->
     <div class="modal-overlay" id="formatModal">
         <div class="modal-box">
             <div class="modal-header">
                 <h2>📋 Markdown 格式规范</h2>
                 <button class="modal-close" onclick="closeModal()">✕</button>
             </div>
+
+            <!-- ===== Modal 导航栏 ===== -->
+            <div class="modal-nav" id="modalNav">
+                <button class="nav-btn active-nav" id="navFullSpec" onclick="scrollToTop()">📖 完整规范</button>
+                <button class="nav-btn" id="navAIPrompt" onclick="scrollToAIPrompt()">🤖 给 AI 的 Prompt</button>
+                <span class="nav-divider"></span>
+                <span class="nav-hint">点击按钮快速定位</span>
+            </div>
+
             <div class="modal-body" id="modalBody">
                 <!-- 由 JavaScript 动态渲染 -->
             </div>
+
             <div class="modal-footer">
-                <button class="btn" onclick="copyFormatSpec()">📋 复制全部规范</button>
+                <button class="btn" onclick="copyFullSpec()">📋 复制全部规范</button>
                 <button class="btn btn-outline" onclick="closeModal()">关闭</button>
             </div>
         </div>
@@ -799,9 +919,7 @@
             function saveHistory() {
                 if (isUndoRedo) return;
                 const current = textarea.value;
-                // 如果当前值与历史最后一条相同，不重复保存
                 if (history.length > 0 && history[historyIndex] === current) return;
-                // 如果当前索引不在最后，丢弃后面的历史
                 if (historyIndex < history.length - 1) {
                     history = history.slice(0, historyIndex + 1);
                 }
@@ -851,23 +969,17 @@
                     e.preventDefault();
                     redo();
                 }
-                // Ctrl+B / Ctrl+I 用于加粗斜体（暂不实现浏览器默认行为拦截，因为我们需要自定义）
-                // 但为了避免干扰，让用户使用工具栏即可
             });
 
-            // 在输入时保存历史（用防抖避免频繁保存）
             let saveTimer;
             textarea.addEventListener('input', function() {
-                // 先渲染（在保存前，让预览同步）
                 render();
-                // 延迟保存历史，避免每次按键都保存（但用户希望每步都能撤回）
                 clearTimeout(saveTimer);
                 saveTimer = setTimeout(function() {
                     saveHistory();
                 }, 100);
             });
 
-            // 初始化保存
             setTimeout(saveHistory, 100);
 
             // ---------- 工具：去除所有行首空格 ----------
@@ -875,103 +987,338 @@
                 return str.replace(/^[ \t]+/gm, '');
             }
 
-            // ---------- 格式规范内容 ----------
-            const formatSpec = trimLines(`
-                <h3>📌 头部信息</h3>
-                <div class="code-block"># 你的姓名
-                电话: xxx | 邮箱: xxx | 地址: xxx
-                求职方向：目标岗位 / 职业方向</div>
-                <p style="font-size:13px; color:#666; margin-top:-6px;">联系方式用 <strong>|</strong> 分隔，求职方向单独一行。</p>
+            // ---------- 格式规范内容（完整版，含 AI Prompt 区域） ----------
+            const fullSpec = trimLines(`
+                <h3>一、头部信息（姓名、联系方式、求职方向）</h3>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
+                    <thead>
+                        <tr style="background:#f1f4f9;">
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:15%;">元素</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:35%;">格式</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:50%;">示例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">姓名</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">以 <code># </code>（井号 + 空格）开头，单独占一行</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code># 张三</code></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">联系方式</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">紧接在姓名行之后，用 <strong>|</strong>（<strong>英文半角竖线</strong>）分隔多个项目</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>电话: 138-0000-0000 | 邮箱: san@email.com | 地址: 北京</code></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">求职方向</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">紧接在联系方式行之后，另起一行，<strong>不以 <code>#</code>、<code>-</code>、<code>*</code> 开头</strong>的纯文本</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>求职方向：全栈开发工程师 / 技术经理</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size:13px; color:#666; margin:-6px 0 12px 0;"><strong>效果：</strong>姓名以大号字体居中显示；联系方式在同一行用 <code>|</code> 分隔居中显示；求职方向在联系方式下方居中显示。</p>
 
-                <h3>📌 一级标题（版块名称）</h3>
+                <h3>二、一级标题（版块名称）</h3>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
+                    <thead>
+                        <tr style="background:#f1f4f9;">
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:30%;">格式</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:70%;">效果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">以 <code># </code>（井号 + 空格）开头，单独占一行</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">生成一个带下划线的版块标题，字号比正文大一号，字体加粗</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="code-block"># 教育背景
                 # 工作经历
-                # 项目经历</div>
+                # 项目经历
+                # 专业技能</div>
+                <p style="font-size:13px; color:#666; margin:-6px 0 12px 0;"><strong>效果：</strong>「教育背景」「工作经历」等版块名称会以大号加粗字体显示，并带有下划线，用于区分不同内容区域。</p>
 
-                <h3>📌 二级标题（条目）</h3>
-                <p style="font-size:13px; color:#666; margin-bottom:4px;">使用 <strong>|</strong>（<span class="highlight">英文半角竖线</span>）分隔各栏，自动识别为两栏或三栏：</p>
-                <div class="code-block"><span style="color:#0f973d;">// 两栏（名称 + 时间）</span>
-                ## 学生会主席 | 2023 – 2024
-
-                <span style="color:#0f973d;">// 三栏（名称 + 角色 + 时间）</span>
-                ## 复旦大学 | 计算机科学硕士 | 2023 – 2026</div>
-
-                <h3>📌 列表项（描述内容）</h3>
-                <div class="code-block">- 负责活动策划与执行，参与人数 200+
-                - 统筹宣传矩阵，公众号粉丝增长 35%</div>
-
-                <div class="note">
-                    <strong>⚠️ 关键规则：</strong><br>
-                    • 二级标题中的分隔符 <strong>|</strong> 必须是 <strong>英文半角</strong> 竖线（Shift + \\）<br>
-                    • 二级标题有 2 段 → 自动识别为 <strong>两栏</strong>（名称左对齐，时间右对齐）<br>
-                    • 二级标题有 ≥3 段 → 自动识别为 <strong>三栏</strong>（左、中、右对齐）<br>
-                    • 列表项以 <code>-</code> 或 <code>*</code> 开头
+                <h3>三、二级标题（条目）</h3>
+                <p style="font-size:13px; color:#666; margin-bottom:6px;">二级标题以 <code>## </code>（两个井号 + 空格）开头，使用 <code>|</code>（<strong>英文半角竖线</strong>）分隔各栏。</p>
+                <div class="note" style="margin-bottom:10px;">
+                    <strong>重要：二级标题最多为三栏，即一栏、二栏或三栏。不存在四栏或以上的情况。</strong>
+                </div>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
+                    <thead>
+                        <tr style="background:#f1f4f9;">
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">分隔后段数</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">栏数</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">对齐方式</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">适用场景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">1 段</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">一栏</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">左对齐</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">较少使用，适用于只有一个名称的条目</td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">2 段</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">两栏</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">左对齐、右对齐</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">适用于「校园经历」等只需要名称和时间的场景</td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">3 段</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">三栏</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">左对齐、居中对齐、右对齐</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">适用于「教育背景」「实习经历」「工作经历」「项目经历」等</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-block">## 学生会主席 | 2023 – 2024
+                ## 复旦大学 | 计算机科学硕士 | 2023 – 2026
+                ## 字节跳动 | 高级全栈工程师 | 2022 – 至今</div>
+                <p style="font-size:13px; color:#666; margin:-6px 0 12px 0;"><strong>效果：</strong></p>
+                <div style="font-family: monospace; font-size:13px; background:#f8f9fa; padding:8px 12px; border-radius:4px; margin:-4px 0 12px 0; border:1px solid #e9ecf0;">
+                    学生会主席                                        2023 – 2024<br>
+                    复旦大学                    计算机科学硕士          2023 – 2026<br>
+                    字节跳动                    高级全栈工程师          2022 – 至今
+                </div>
+                <div class="note" style="margin-bottom:6px;">
+                    <strong>关键规则：</strong><br>
+                    • 以 <code>## </code>（两个井号 + 空格）开头<br>
+                    • 各栏之间用 <code>|</code>（<strong>英文半角竖线</strong>，即 Shift + \\）分隔<br>
+                    • <code>|</code> 前后的空格可有可无，系统会自动去除<br>
+                    • 2 段 → 自动识别为两栏（名称左对齐，时间右对齐）<br>
+                    • 3 段 → 自动识别为三栏（名称左对齐，角色/专业居中对齐，时间右对齐）<br>
+                    • 时间栏固定约占整行宽度的 20%<br>
+                    • 系统会自动检测每行文本是否溢出，并动态调整列宽，确保所有内容完整显示
+                </div>
+                <div class="note" style="border-left-color:#dc2626; background:#fef2f2;">
+                    <strong>⚠️ 注意：</strong> <code>|</code> 必须是<strong>英文半角</strong>竖线（ASCII 124），中文全角竖线 <code>｜</code>（U+FF5C）不会被识别，会导致排版错乱。
                 </div>
 
-                <h3>📌 完整示例</h3>
+                <h3>四、列表项（条目下的具体描述）</h3>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
+                    <thead>
+                        <tr style="background:#f1f4f9;">
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:30%;">格式</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:70%;">效果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">以 <code>- </code>（短横 + 空格）或 <code>* </code>（星号 + 空格）开头</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">生成带项目符号的描述列表，每项前面自动添加项目符号，文字自动换行缩进</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-block">- 负责活动策划与执行，参与人数 200+
+                - 统筹宣传矩阵，公众号粉丝增长 35%
+                - 基于 Python 处理 10 万+ 条销售数据，输出可视化看板</div>
+                <p style="font-size:13px; color:#666; margin:-6px 0 12px 0;"><strong>效果：</strong>每项前面自动添加项目符号（主题不同，符号不同：➤、●、• 等），文字自动换行缩进。</p>
+                <div class="note" style="margin-bottom:6px;">
+                    <strong>补充说明：</strong> 列表项内容较长时可以直接续写，不需要额外缩进或添加其他标记，系统会自动换行并保持缩进对齐。
+                </div>
+
+                <h3>五、加粗和斜体</h3>
+                <div class="note" style="border-left-color:#dc2626; background:#fef2f2; margin-bottom:10px;">
+                    <strong>⚠️ 重要：本系统推荐使用 HTML 标签来实现加粗和斜体，不要使用 Markdown 标记（<code>**</code> 和 <code>*</code>），因为 Markdown 标记在列表项中不会被解析。</strong>
+                </div>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
+                    <thead>
+                        <tr style="background:#f1f4f9;">
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:18%;">样式</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:32%;">使用标签</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:30%;">示例</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:20%;">预览效果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">加粗</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;strong&gt;</code> 和 <code>&lt;/strong&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;strong&gt;核心课程&lt;/strong&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>核心课程</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">斜体</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;em&gt;</code> 和 <code>&lt;/em&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;em&gt;详见附件&lt;/em&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><em>详见附件</em></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">加粗 + 斜体</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">组合使用</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;strong&gt;&lt;em&gt;重要提示&lt;/em&gt;&lt;/strong&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong><em>重要提示</em></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note" style="margin-bottom:6px;">
+                    <strong>补充说明：</strong><br>
+                    • 这些 HTML 标签可以插入到任何文本位置（包括标题和列表项中），<strong>不会影响排版结构</strong>。<br>
+                    • 中英文通用，效果一致。<br>
+                    • 日常使用保持默认即可，仅在需要强调特定文字时使用。
+                </div>
+
+                <h3>六、字体和字号</h3>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
+                    <thead>
+                        <tr style="background:#f1f4f9;">
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:20%;">样式</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:45%;">使用标签</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:35%;">示例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">字体</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;span style="font-family: '字体名';"&gt;</code> 和 <code>&lt;/span&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;span style="font-family: 'Georgia';"&gt;英文标题&lt;/span&gt;</code></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">字号</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;span style="font-size: Xpt;"&gt;</code> 和 <code>&lt;/span&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;span style="font-size: 14pt;"&gt;放大文字&lt;/span&gt;</code></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">字体 + 字号</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">合并为一个 <code>&lt;span&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;span style="font-family: 'Arial'; font-size: 16pt;"&gt;组合样式&lt;/span&gt;</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size:13px; color:#666; margin:-6px 0 6px 0;"><strong>系统内置字体选项：</strong> 默认（继承主题）、Times New Roman、Arial、Georgia、Courier New、PingFang/微软雅黑、宋体、黑体、楷体</p>
+                <p style="font-size:13px; color:#666; margin:0 0 12px 0;"><strong>系统内置字号选项：</strong> 默认（10pt）、9pt、10pt、11pt、12pt、14pt、16pt、18pt、20pt、24pt</p>
+                <div class="note" style="margin-bottom:6px;">
+                    <strong>补充说明：</strong><br>
+                    • 这些标签可以插入到任何文本位置（包括标题和列表项中），<strong>不会影响排版结构</strong>。<br>
+                    • 日常使用保持默认即可，仅在需要强调特定文字时使用。
+                </div>
+
+                <h3>七、完整示例</h3>
                 <div class="code-block"># 张三
                 电话: 138-0000-0000 | 邮箱: san.zhang@email.com | 地址: 北京
-                求职方向：全栈开发工程师
+                求职方向：全栈开发工程师 / 技术经理
 
                 # 教育背景
                 ## 北京大学 | 计算机科学硕士 | 2022 – 2025
-                - 研究方向：分布式系统
+                - 研究方向：<strong>分布式系统</strong>
                 - GPA: 3.8/4.0
 
                 # 工作经历
                 ## 字节跳动 | 高级全栈工程师 | 2022 – 至今
-                - 主导电商后台重构，接口响应时间降低 40%
-
-                # 专业技能
-                - 前端: React, Vue, TypeScript
-                - 后端: Node.js, Java, Python</div>
-            `);
-
-            // ---------- 示例内容 ----------
-            const exampleContent = trimLines(`
-                # 陈思远
-                电话: 139-8888-1234 | 邮箱: siyuan.chen@outlook.com | 地址: 杭州
-                求职方向：数据分析师 / 产品经理
-
-                # 教育背景
-                ## University of Cambridge | Master of Philosophy in Data Science | Oct 2023 – Sep 2024
-                - 研究方向：机器学习与因果推断
-                - 毕业论文获系优秀论文提名
-                ## London School of Economics | Bachelor of Science in Economics | Sep 2019 – Jun 2023
-                - 一等荣誉学位 (First Class Honours)
-                - 核心课程：计量经济学、行为经济学、运筹学
-
-                # 校园经历
-                ## 剑桥中国学联 | 副主席 | Oct 2023 – Sep 2024
-                - 策划并执行 8 场学术讲座与职业分享会，累计参与 500+ 人次
-                - 统筹学联宣传矩阵，公众号粉丝增长 35%
-                ## LSE 经济学社 | 学术部部长 | Sep 2021 – Jun 2023
-                - 组织 12 场学术沙龙，邀请教授与业界嘉宾共 9 人
-                - 主编学社年刊，收录论文 15 篇
-
-                # 实习经历
-                ## McKinsey & Company | 战略咨询实习生 | Jun 2024 – Sep 2024
-                - 参与某消费品牌数字化转型项目，协助完成市场调研与竞品分析
-                - 基于 Python 处理 10 万+ 条销售数据，输出可视化看板
-                ## L'Oréal China | 市场分析实习生 | Dec 2023 – Feb 2024
-                - 协助跟进 2024 年货节活动，参与定价策略与流量监测
-                - 利用 SQL 提取用户行为数据，输出周报驱动运营决策
-                ## 招商证券 | 行业研究实习生 | Jul 2022 – Sep 2022
-                - 覆盖消费品与零售赛道，协助撰写 3 份深度行业研究报告
-                - 负责数据收集与更新，搭建财务预测模型
+                - 主导电商后台重构，接口响应时间降低 <span style="font-size: 14pt;">40%</span>
+                - 设计微前端架构，支撑 8 个团队并行开发
 
                 # 项目经历
-                ## Carbon Footprint Tracker App | 产品设计负责人 | Jan 2025 – Apr 2025
-                - 设计并开发碳足迹追踪工具，集成用户出行与消费数据
-                - 完成用户调研与原型测试，累计收集有效问卷 200+ 份
-                ## E-commerce Recommendation System | 项目成员 | Oct 2023 – Dec 2023
-                - 基于协同过滤与 LightGBM 构建电商推荐模型，AUC 达 0.87
-                - 撰写项目白皮书，获学院科研展示日最佳展示奖
+                ## 智联低代码平台 | 开源项目负责人 | 2023 – 至今
+                - 基于 Vue 3 + Node.js 构建，服务 <strong>200+</strong> 企业
+                - GitHub 获得 <span style="font-family: 'Georgia'; font-size: 16pt;">1.2k</span> Star
 
                 # 专业技能
-                - 数据分析: Python, R, SQL, Tableau
-                - 产品工具: Figma, Miro, Notion, Jira
-                - 语言: 中文 (母语), 英语 (IELTS 8.0), 法语 (基础)
+                - 前端: React, Vue, TypeScript, Webpack
+                - 后端: Node.js, Java, Python
+                - 基础设施: Docker, Kubernetes, Redis, Kafka</div>
+                <div class="note" style="margin-bottom:6px;">
+                    <strong>样式使用说明：</strong><br>
+                    • 用 <code>&lt;strong&gt;</code> 突出关键<strong>术语/名词</strong>（如“分布式系统”）<br>
+                    • 用 <code>&lt;span style="font-size: 14pt;"&gt;</code> 突出关键<strong>数据/数字</strong>（如“40%”）<br>
+                    • 用 <code>&lt;span style="font-family: 'Georgia'; font-size: 16pt;"&gt;</code> 突出<strong>需要视觉强调的数值</strong>（如“1.2k”）
+                </div>
+
+                <h3>八、符号速查表</h3>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
+                    <thead>
+                        <tr style="background:#f1f4f9;">
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:12%;">符号</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:16%;">名称</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:16%;">半角/全角</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:20%;">键盘输入</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:20%;">用途</th>
+                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:16%;">位置要求</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>#</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">井号</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">半角</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">Shift + 3</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">一级标题开头</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>必须出现在行首</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>##</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">两个井号</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">半角</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">Shift + 3 × 2</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">二级标题开头</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>必须出现在行首</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>|</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">竖线</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>半角</strong></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">Shift + \\</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">二级标题中分隔各栏</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>只能出现在二级标题行中</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>-</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">短横</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">半角</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">减号键</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">列表项开头</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>必须出现在行首</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>*</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">星号</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">半角</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">Shift + 8</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">列表项开头</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>必须出现在行首</strong></td>
+                        </tr>
+                        <tr style="background:#fef2f2;">
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>｜</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">竖线</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">❌ <strong>全角（错误）</strong></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">中文输入法下输入</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">无用途（错误符号）</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">不会被识别，会导致排版错乱</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="note" style="border-left-color:#dc2626; background:#fef2f2;">
+                    <strong>⚠️ 特别注意：</strong> <code>#</code>、<code>##</code>、<code>-</code>、<code>*</code> 这些符号<strong>必须出现在行首</strong>，不能出现在行中间。<code>|</code> 只能用在二级标题行中，用于分隔各栏。
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- AI Prompt 专属提醒区域（用特殊 id 标记，供导航定位） -->
+                <!-- ============================================================ -->
+                <div id="ai-prompt-section" class="ai-prompt-section scroll-anchor">
+                    <div class="section-label">
+                        <span class="label-text">🤖 给 AI 的专属提醒</span>
+                        <button class="copy-ai-btn" id="copyAiBtn" onclick="copyAIPrompt()">📋 复制此段</button>
+                    </div>
+                    <div class="ai-note">
+                        <p style="font-weight:600; margin-bottom:6px;">如果你是将此规范交给 AI 生成简历文本，请务必阅读以下提醒：</p>
+                        <ol style="padding-left:20px; margin:0;">
+                            <li><strong>你只需生成纯文本内容</strong>：一级标题用 <code># </code>，二级标题用 <code>## </code>，列表项用 <code>- </code>，以及需要强调的文字处添加 HTML 标签（见第五节、第六节）。</li>
+                            <li><strong>不要添加额外的排版符号</strong>：不需要添加空格缩进、换行符对齐等，因为本系统会自动排版。</li>
+                            <li><strong>加粗和斜体请使用 HTML 标签</strong>：
+                                <ul style="padding-left:20px; margin:2px 0;">
+                                    <li>加粗用 <code>&lt;strong&gt;</code> 和 <code>&lt;/strong&gt;</code></li>
+                                    <li>斜体用 <code>&lt;em&gt;</code> 和 <code>&lt;/em&gt;</code></li>
+                                    <li><strong>不要使用 <code>**</code> 和 <code>*</code> 作为加粗/斜体标记</strong>，它们在列表项中不会被解析。</li>
+                                </ul>
+                            </li>
+                            <li><strong>二级标题最多三栏</strong>：用 <code>|</code> 分隔后，最多只能有 3 段。不要生成 4 段或以上的二级标题。</li>
+                            <li><strong><code>|</code> 必须使用英文半角竖线</strong>：即 Shift + \ 输入的 <code>|</code>，不要使用中文全角竖线 <code>｜</code>。</li>
+                        </ol>
+                    </div>
+                </div>
             `);
 
             // ---------- 解析器 ----------
@@ -1225,9 +1572,54 @@
             }
 
             // ---------- 加载示例 ----------
+            const exampleContent = trimLines(`
+                # 陈思远
+                电话: 139-8888-1234 | 邮箱: siyuan.chen@outlook.com | 地址: 杭州
+                求职方向：数据分析师 / 产品经理
+
+                # 教育背景
+                ## University of Cambridge | Master of Philosophy in Data Science | Oct 2023 – Sep 2024
+                - 研究方向：机器学习与因果推断
+                - 毕业论文获系优秀论文提名
+                ## London School of Economics | Bachelor of Science in Economics | Sep 2019 – Jun 2023
+                - 一等荣誉学位 (First Class Honours)
+                - 核心课程：计量经济学、行为经济学、运筹学
+
+                # 校园经历
+                ## 剑桥中国学联 | 副主席 | Oct 2023 – Sep 2024
+                - 策划并执行 8 场学术讲座与职业分享会，累计参与 500+ 人次
+                - 统筹学联宣传矩阵，公众号粉丝增长 35%
+                ## LSE 经济学社 | 学术部部长 | Sep 2021 – Jun 2023
+                - 组织 12 场学术沙龙，邀请教授与业界嘉宾共 9 人
+                - 主编学社年刊，收录论文 15 篇
+
+                # 实习经历
+                ## McKinsey & Company | 战略咨询实习生 | Jun 2024 – Sep 2024
+                - 参与某消费品牌数字化转型项目，协助完成市场调研与竞品分析
+                - 基于 Python 处理 10 万+ 条销售数据，输出可视化看板
+                ## L'Oréal China | 市场分析实习生 | Dec 2023 – Feb 2024
+                - 协助跟进 2024 年货节活动，参与定价策略与流量监测
+                - 利用 SQL 提取用户行为数据，输出周报驱动运营决策
+                ## 招商证券 | 行业研究实习生 | Jul 2022 – Sep 2022
+                - 覆盖消费品与零售赛道，协助撰写 3 份深度行业研究报告
+                - 负责数据收集与更新，搭建财务预测模型
+
+                # 项目经历
+                ## Carbon Footprint Tracker App | 产品设计负责人 | Jan 2025 – Apr 2025
+                - 设计并开发碳足迹追踪工具，集成用户出行与消费数据
+                - 完成用户调研与原型测试，累计收集有效问卷 200+ 份
+                ## E-commerce Recommendation System | 项目成员 | Oct 2023 – Dec 2023
+                - 基于协同过滤与 LightGBM 构建电商推荐模型，AUC 达 0.87
+                - 撰写项目白皮书，获学院科研展示日最佳展示奖
+
+                # 专业技能
+                - 数据分析: Python, R, SQL, Tableau
+                - 产品工具: Figma, Miro, Notion, Jira
+                - 语言: 中文 (母语), 英语 (IELTS 8.0), 法语 (基础)
+            `);
+
             function loadExample() {
                 textarea.value = exampleContent;
-                // 重置历史
                 history = [];
                 historyIndex = -1;
                 saveHistory();
@@ -1285,7 +1677,12 @@
             window.openModal = function() {
                 document.getElementById('formatModal').classList.add('active');
                 document.body.style.overflow = 'hidden';
+                // 滚动到顶部
+                document.getElementById('modalBody').scrollTop = 0;
+                // 更新导航按钮状态
+                setNavActive('navFullSpec');
             };
+
             window.closeModal = function() {
                 document.getElementById('formatModal').classList.remove('active');
                 document.body.style.overflow = '';
@@ -1299,9 +1696,35 @@
                 if (e.key === 'Escape') closeModal();
             });
 
-            // ---------- 复制格式规范 ----------
-            window.copyFormatSpec = function() {
+            // ---------- Modal 导航功能 ----------
+            function setNavActive(id) {
+                document.querySelectorAll('.modal-nav .nav-btn').forEach(b => b.classList.remove('active-nav'));
+                document.getElementById(id).classList.add('active-nav');
+            }
+
+            window.scrollToTop = function() {
+                const body = document.getElementById('modalBody');
+                body.scrollTo({ top: 0, behavior: 'smooth' });
+                setNavActive('navFullSpec');
+            };
+
+            window.scrollToAIPrompt = function() {
+                const target = document.getElementById('ai-prompt-section');
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // 高亮闪烁
+                    target.classList.add('highlight-flash');
+                    setTimeout(() => {
+                        target.classList.remove('highlight-flash');
+                    }, 1500);
+                    setNavActive('navAIPrompt');
+                }
+            };
+
+            // ---------- 复制全部规范 ----------
+            window.copyFullSpec = function() {
                 const el = document.getElementById('modalBody');
+                // 获取纯文本，但保留结构（不要 HTML 标签）
                 const text = el.innerText || el.textContent;
                 navigator.clipboard.writeText(text).then(() => {
                     const btn = document.querySelector('.modal-footer .btn:first-child');
@@ -1322,7 +1745,38 @@
                 });
             };
 
-            // ---------- 格式工具栏函数（加粗/斜体使用 HTML 标签） ----------
+            // ---------- 复制 AI Prompt 部分 ----------
+            window.copyAIPrompt = function() {
+                const el = document.getElementById('ai-prompt-section');
+                const text = el.innerText || el.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = document.getElementById('copyAiBtn');
+                    const orig = btn.textContent;
+                    btn.textContent = '✅ 已复制';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = orig;
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(() => {
+                    const range = document.createRange();
+                    range.selectNode(el);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    document.execCommand('copy');
+                    window.getSelection().removeAllRanges();
+                    const btn = document.getElementById('copyAiBtn');
+                    const orig = btn.textContent;
+                    btn.textContent = '✅ 已复制';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = orig;
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            };
+
+            // ---------- 格式工具栏函数 ----------
             function wrapWithTags(openTag, closeTag) {
                 const start = textarea.selectionStart;
                 const end = textarea.selectionEnd;
@@ -1332,7 +1786,6 @@
                 }
                 const selected = textarea.value.substring(start, end);
                 let newText;
-                // 检查是否已经被同样的标签包裹（切换效果）
                 const regex = new RegExp(`^${openTag}(.*)${closeTag}$`, 's');
                 const match = selected.match(regex);
                 if (match) {
@@ -1345,7 +1798,6 @@
                 textarea.selectionEnd = start + newText.length;
                 textarea.focus();
                 render();
-                // 保存历史
                 clearTimeout(saveTimer);
                 saveTimer = setTimeout(saveHistory, 100);
             }
@@ -1358,7 +1810,6 @@
                 wrapWithTags('<em>', '</em>');
             };
 
-            // 应用字体样式（覆盖已有的 font-family）
             window.applyFontFamily = function() {
                 const select = document.getElementById('fontFamilySelect');
                 const font = select.value;
@@ -1369,7 +1820,6 @@
                 applySpanStyle('font-family', font);
             };
 
-            // 应用字号（覆盖已有的 font-size）
             window.applyFontSize = function() {
                 const select = document.getElementById('fontSizeSelect');
                 const size = select.value;
@@ -1380,7 +1830,6 @@
                 applySpanStyle('font-size', size);
             };
 
-            // 通用函数：为选中文本包裹 <span style="property: value;">，如果已有则覆盖
             function applySpanStyle(property, value) {
                 const start = textarea.selectionStart;
                 const end = textarea.selectionEnd;
@@ -1414,7 +1863,6 @@
                 saveTimer = setTimeout(saveHistory, 100);
             }
 
-            // 从选中文本中移除指定 CSS 属性
             function removeStyleFromSelection(property) {
                 const start = textarea.selectionStart;
                 const end = textarea.selectionEnd;
@@ -1449,7 +1897,7 @@
             }
 
             // ---------- 初始化 ----------
-            modalBody.innerHTML = formatSpec;
+            modalBody.innerHTML = fullSpec;
             loadExample();
             setTheme('d');
 
@@ -1457,9 +1905,7 @@
 
             // ---------- 事件绑定 ----------
             textarea.addEventListener('input', function() {
-                // input 事件中只负责触发渲染和保存历史（由上面的监听器处理）
-                // 但为了防冲突，这里只调用渲染
-                // 历史保存由独立的 input 监听器处理
+                // 由独立监听器处理
             });
 
             themeSelector.addEventListener('change', function(e) {
