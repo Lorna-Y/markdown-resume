@@ -44,16 +44,10 @@
             overflow: hidden;
         }
         .toolbar {
-            background: #fff;
-            padding: 10px 24px;
+            background: #fff; padding: 10px 24px;
             border-bottom: 1px solid #d0d7de;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-            flex-wrap: wrap;
-            gap: 8px;
-            z-index: 10;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-shrink: 0; flex-wrap: wrap; gap: 8px; z-index: 10;
         }
         .toolbar .brand { font-weight: 700; font-size: 18px; color: #0b1c33; display: flex; align-items: center; gap: 8px; }
         .toolbar .actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -77,120 +71,68 @@
         }
         .editor-pane {
             flex: 1; display: flex; flex-direction: column;
-            background: #fff; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            background: #fff; border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
             overflow: hidden; min-width: 0;
         }
         .editor-pane .header {
-            padding: 8px 16px;
-            background: #f8f9fa;
+            padding: 8px 16px; background: #f8f9fa;
             border-bottom: 1px solid #e9ecf0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             flex-shrink: 0;
         }
-        .editor-pane .header .title {
-            font-size: 13px;
-            font-weight: 500;
-            color: #475467;
-        }
-        .editor-pane .header .editor-actions {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
+        .editor-pane .header .title { font-size: 13px; font-weight: 500; color: #475467; }
+        .editor-pane .header .editor-actions { display: flex; gap: 6px; align-items: center; }
         .editor-pane .header .editor-actions .btn-sm {
-            background: transparent;
-            border: 1px solid #d0d7de;
-            border-radius: 4px;
-            padding: 3px 10px;
-            font-size: 12px;
-            color: #475467;
-            cursor: pointer;
-            transition: all 0.15s;
-            font-family: inherit;
-            white-space: nowrap;
+            background: transparent; border: 1px solid #d0d7de; border-radius: 4px;
+            padding: 3px 10px; font-size: 12px; color: #475467;
+            cursor: pointer; transition: all 0.15s; font-family: inherit; white-space: nowrap;
         }
         .editor-pane .header .editor-actions .btn-sm:hover {
-            background: #f0f5ff;
-            border-color: #1a5cff;
-            color: #1a5cff;
+            background: #f0f5ff; border-color: #1a5cff; color: #1a5cff;
         }
         .editor-pane .header .editor-actions .btn-sm.copy-success {
-            border-color: #0f973d;
-            color: #0f973d;
-            background: #e8f5ee;
+            border-color: #0f973d; color: #0f973d; background: #e8f5ee;
         }
         .editor-pane .header .editor-actions .btn-sm:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            pointer-events: none;
+            opacity: 0.3; cursor: not-allowed; pointer-events: none;
         }
 
         .format-toolbar {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 16px;
-            background: #fcfcfd;
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px 16px; background: #fcfcfd;
             border-bottom: 1px solid #e9ecf0;
-            flex-shrink: 0;
-            flex-wrap: wrap;
+            flex-shrink: 0; flex-wrap: wrap;
         }
         .format-toolbar .btn-format {
-            background: transparent;
-            border: 1px solid #d0d7de;
-            border-radius: 4px;
-            padding: 2px 8px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #1e293b;
-            cursor: pointer;
-            transition: all 0.15s;
-            font-family: inherit;
-            line-height: 1.6;
+            background: transparent; border: 1px solid #d0d7de; border-radius: 4px;
+            padding: 2px 8px; font-size: 13px; font-weight: 600; color: #1e293b;
+            cursor: pointer; transition: all 0.15s; font-family: inherit; line-height: 1.6;
         }
         .format-toolbar .btn-format:hover {
-            background: #f0f5ff;
-            border-color: #1a5cff;
-            color: #1a5cff;
+            background: #f0f5ff; border-color: #1a5cff; color: #1a5cff;
         }
-        .format-toolbar .separator {
-            width: 1px;
-            height: 22px;
-            background: #d0d7de;
-        }
+        .format-toolbar .separator { width: 1px; height: 22px; background: #d0d7de; }
         .format-toolbar select {
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid #d0d7de;
-            background: #fff;
-            font-size: 12px;
-            cursor: pointer;
-            outline: none;
-            font-family: inherit;
-            color: #1e293b;
+            padding: 2px 6px; border-radius: 4px; border: 1px solid #d0d7de;
+            background: #fff; font-size: 12px; cursor: pointer;
+            outline: none; font-family: inherit; color: #1e293b;
         }
         .format-toolbar select:focus {
-            border-color: #1a5cff;
-            box-shadow: 0 0 0 2px rgba(26,92,255,0.2);
+            border-color: #1a5cff; box-shadow: 0 0 0 2px rgba(26,92,255,0.2);
         }
-        .format-toolbar label {
-            font-size: 12px;
-            color: #475467;
-        }
+        .format-toolbar label { font-size: 12px; color: #475467; }
 
         #markdown-input {
             flex: 1; padding: 16px; border: none; outline: none; resize: none;
             font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             font-size: 14px; line-height: 1.7; color: #1e293b; background: #fff;
-            min-height: 200px;
-            tab-size: 2;
+            min-height: 200px; tab-size: 2;
         }
         .preview-pane {
             flex: 1; display: flex; flex-direction: column;
-            background: #f4f6f9; border-radius: 12px; overflow: hidden;
-            position: relative; min-width: 0;
+            background: #f4f6f9; border-radius: 12px;
+            overflow: hidden; position: relative; min-width: 0;
         }
         .preview-pane .header {
             padding: 8px 16px; background: #f8f9fa;
@@ -210,11 +152,9 @@
         }
 
         #resume-page {
-            width: 210mm;
-            background: #fff;
+            width: 210mm; background: #fff;
             box-shadow: 0 2px 16px rgba(0,0,0,0.12);
-            position: relative;
-            flex-shrink: 0;
+            position: relative; flex-shrink: 0;
             transition: font-family 0.2s;
         }
         #resume-content { box-sizing: border-box; color: #1a1a1a; }
@@ -245,188 +185,105 @@
             letter-spacing: -0.01em;
         }
 
-        /* ===== 头部基础样式 ===== */
         #resume-page[data-theme] #resume-header {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 0.8mm;
-            padding-bottom: 0;
-            border-bottom: none;
+            position: relative; display: flex; flex-direction: column;
+            align-items: center; text-align: center;
+            margin-bottom: 0.8mm; padding-bottom: 0; border-bottom: none;
         }
-
-        #resume-page[data-photo="false"] #resume-header {
-            min-height: auto;
-        }
-
+        #resume-page[data-photo="false"] #resume-header { min-height: auto; }
         #resume-page[data-photo="true"] #resume-header {
-            min-height: var(--photo-h);
-            justify-content: center;
+            min-height: var(--photo-h); justify-content: center;
         }
-
         #resume-page[data-theme] #header-info {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            width: 100%; display: flex; flex-direction: column; align-items: center;
         }
-
         #resume-page[data-align="left"] #resume-header {
-            align-items: flex-start;
-            text-align: left;
+            align-items: flex-start; text-align: left;
         }
         #resume-page[data-align="left"] #header-info {
-            align-items: flex-start;
-            text-align: left;
+            align-items: flex-start; text-align: left;
         }
-        #resume-page[data-align="left"] #contact-info {
-            justify-content: flex-start;
-        }
+        #resume-page[data-align="left"] #contact-info { justify-content: flex-start; }
 
         #resume-page[data-theme] #profile-name {
-            display: block;
-            font-size: var(--font-size-name);
-            margin: 0 0 0.8mm;
-            letter-spacing: 1px;
-            line-height: 1.12;
-            font-weight: 700;
-            font-family: inherit;
+            display: block; font-size: var(--font-size-name);
+            margin: 0 0 0.8mm; letter-spacing: 1px; line-height: 1.12;
+            font-weight: 700; font-family: inherit;
         }
         #resume-page[data-theme] #contact-info {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0;
-            margin: 0;
-            font-size: var(--font-size-contact);
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 0;
+            margin: 0; font-size: var(--font-size-contact);
             line-height: var(--layout-line-height);
         }
-        #resume-page[data-theme] .contact-item + .contact-item::before {
-            content: " | ";
-        }
+        #resume-page[data-theme] .contact-item + .contact-item::before { content: " | "; }
         #resume-page[data-theme] #job-target {
-            margin-top: 0;
-            font-size: var(--font-size-body);
-            color: var(--color-text, #1a1a1a);
-            font-weight: 400;
-            line-height: var(--layout-line-height);
-            max-width: 100%;
+            margin-top: 0; font-size: var(--font-size-body);
+            color: var(--color-text, #1a1a1a); font-weight: 400;
+            line-height: var(--layout-line-height); max-width: 100%;
         }
 
-        /* ===== 照片容器 ===== */
         #resume-page[data-photo="true"] #photo-container {
-            display: flex;
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: var(--photo-w);
-            height: var(--photo-h);
-            border: 1px dashed #c0c4cc;
-            border-radius: 2px;
-            align-items: center;
-            justify-content: center;
-            font-size: 8pt;
-            color: #c0c4cc;
-            cursor: pointer;
-            overflow: hidden;
-            background: #fafbfc;
-            z-index: 5;
-            transition: border-color 0.15s, color 0.15s;
+            display: flex; position: absolute; top: 0; right: 0;
+            width: var(--photo-w); height: var(--photo-h);
+            border: 1px dashed #c0c4cc; border-radius: 2px;
+            align-items: center; justify-content: center;
+            font-size: 8pt; color: #c0c4cc;
+            cursor: pointer; overflow: hidden; background: #fafbfc;
+            z-index: 5; transition: border-color 0.15s, color 0.15s;
         }
         #resume-page[data-photo="true"] #photo-container:hover {
-            border-color: #1a5cff;
-            color: #1a5cff;
+            border-color: #1a5cff; color: #1a5cff;
         }
         #resume-page[data-photo="true"] #photo-container[data-empty="true"]::before {
-            content: "点击上传照片";
-            font-size: 7pt;
-            padding: 0 4px;
-            text-align: center;
-            line-height: 1.3;
+            content: "点击上传照片"; font-size: 7pt; padding: 0 4px;
+            text-align: center; line-height: 1.3;
         }
         #resume-page[data-photo="true"] #photo-container img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; display: block;
         }
-        #resume-page[data-photo="false"] #photo-container {
-            display: none;
-        }
+        #resume-page[data-photo="false"] #photo-container { display: none; }
         @media print {
-            #resume-page[data-photo="true"] #photo-container[data-empty="true"]::before {
-                content: "";
-            }
+            #resume-page[data-photo="true"] #photo-container[data-empty="true"]::before { content: ""; }
         }
 
-        .resume-section {
-            margin-bottom: var(--section-gap);
-            page-break-inside: avoid;
-        }
+        .resume-section { margin-bottom: var(--section-gap); page-break-inside: avoid; }
         .section-title {
             font-size: var(--font-size-section-title);
-            margin: 0 0 0.35mm;
-            padding: 0 0 0.2mm;
-            letter-spacing: 0;
-            font-weight: 700;
-            border-bottom: 1.5px solid currentColor;
-            display: block;
+            margin: 0 0 0.35mm; padding: 0 0 0.2mm;
+            letter-spacing: 0; font-weight: 700;
+            border-bottom: 1.5px solid currentColor; display: block;
         }
-        .resume-entry {
-            margin-bottom: var(--entry-gap);
-            page-break-inside: avoid;
-        }
+        .resume-entry { margin-bottom: var(--entry-gap); page-break-inside: avoid; }
 
         #resume-page[data-theme] .entry-header.two-col {
-            display: grid;
-            grid-template-columns: 4fr 1fr;
-            align-items: baseline;
-            column-gap: 2mm;
-            margin-bottom: 0.15mm;
-            line-height: 1.25;
-            width: 100%;
+            display: grid; grid-template-columns: 4fr 1fr;
+            align-items: baseline; column-gap: 2mm;
+            margin-bottom: 0.15mm; line-height: 1.25; width: 100%;
         }
         #resume-page[data-theme] .entry-header.two-col .header-item:nth-child(1) { text-align: left; }
         #resume-page[data-theme] .entry-header.two-col .header-item:nth-child(2) { text-align: right; }
 
         #resume-page[data-theme] .entry-header.three-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            align-items: baseline;
-            column-gap: 2mm;
-            margin-bottom: 0.15mm;
-            line-height: 1.25;
-            width: 100%;
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
+            align-items: baseline; column-gap: 2mm;
+            margin-bottom: 0.15mm; line-height: 1.25; width: 100%;
         }
-
         #resume-page[data-theme] .entry-header .header-item {
-            min-width: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            min-width: 0; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
             font-size: var(--font-size-entry-name);
-            font-weight: 700;
-            font-synthesis: weight;
+            font-weight: 700; font-synthesis: weight;
         }
         #resume-page[data-theme] .entry-header .header-item.date-item {
             font-size: var(--font-size-small);
         }
-
         #resume-page[data-theme] .entry-header.three-col .header-item:nth-child(1) { text-align: left; }
         #resume-page[data-theme] .entry-header.three-col .header-item:nth-child(2) { text-align: center; }
         #resume-page[data-theme] .entry-header.three-col .header-item:nth-child(3) { text-align: right; }
 
         /* ===== 列表通用样式 ===== */
-        .entry-bullets,
-        .skills-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+        .entry-bullets, .skills-list { list-style: none; padding: 0; margin: 0; }
         .entry-bullets .bullet-item,
         .skills-list .bullet-item {
             position: relative;
@@ -437,26 +294,30 @@
         }
         .entry-bullets .bullet-item::before,
         .skills-list .bullet-item::before {
-            position: absolute;
-            left: 0;
-            top: 0;
-            display: flex;
-            align-items: center;
+            position: absolute; left: 0; top: 0;
+            display: flex; align-items: center;
             height: calc(var(--font-size-body) * var(--layout-line-height));
-            line-height: 1;
-            transform: none;
+            line-height: 1; transform: none;
         }
-        .skills-list .bullet-item {
-            padding-left: 3mm;
+        .skills-list .bullet-item { padding-left: 3mm; }
+
+        /* ===== 无符号列表项（用 + 标记） ===== */
+        /* 保持与普通列表项同级的行距和字号，但去掉缩进和符号 */
+        #resume-page[data-theme] .entry-bullets .bullet-item.no-marker,
+        #resume-page[data-theme] .skills-list .bullet-item.no-marker {
+            padding-left: 0 !important;
+            text-indent: 0 !important;
+        }
+        #resume-page[data-theme] .entry-bullets .bullet-item.no-marker::before,
+        #resume-page[data-theme] .skills-list .bullet-item.no-marker::before {
+            content: none !important;
+            display: none !important;
         }
 
-        /* ===== 教育背景的列表项：无符号，直接顶格 ===== */
-        /* 使用 ID 选择器 + !important 确保覆盖所有主题规则 */
+        /* ===== 教育背景的列表项：无符号、顶格（保留兼容原有规则） ===== */
         #resume-page[data-theme] .resume-section[data-section-type="education"] .entry-bullets .bullet-item {
             padding-left: 0 !important;
-            font-size: 9pt;
-            line-height: 1.28;
-            margin-bottom: 0;
+            font-size: 9pt; line-height: 1.28; margin-bottom: 0;
             text-indent: 0 !important;
         }
         #resume-page[data-theme] .resume-section[data-section-type="education"] .entry-bullets .bullet-item::before {
@@ -464,100 +325,84 @@
             display: none !important;
         }
 
-        .resume-section[data-section-type="experience"] .resume-entry {
-            margin-bottom: 1.1mm;
-        }
-        .resume-section[data-section-type="experience"] .resume-entry:last-child {
-            margin-bottom: 0;
-        }
+        .resume-section[data-section-type="experience"] .resume-entry { margin-bottom: 1.1mm; }
+        .resume-section[data-section-type="experience"] .resume-entry:last-child { margin-bottom: 0; }
 
         .page-break-marker {
-            height: 0;
-            overflow: visible;
-            text-align: center;
-            color: #999;
-            font-size: 8pt;
+            height: 0; overflow: visible; text-align: center;
+            color: #999; font-size: 8pt;
             border-bottom: 1px dashed #ccc;
-            margin: 2mm 0;
-            line-height: 0;
-            clear: both;
+            margin: 2mm 0; line-height: 0; clear: both;
             page-break-after: avoid;
         }
         .page-break-marker::before {
-            content: "";
-            display: inline-block;
-            height: 1.2em;
-            vertical-align: top;
+            content: ""; display: inline-block;
+            height: 1.2em; vertical-align: top;
         }
 
         #resume-page[data-theme="a"] {
-            --color-text: #1a1a1a;
-            --color-muted: #4a4a4a;
-            --color-divider: #1a1a1a;
+            --color-text: #1a1a1a; --color-muted: #4a4a4a; --color-divider: #1a1a1a;
             font-family: "Resume Latin", "Times New Roman", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
         }
         #resume-page[data-theme="a"] #resume-content { text-align: justify; text-justify: inter-ideograph; }
         #resume-page[data-theme="a"] .section-title { border-bottom-color: var(--color-divider); color: var(--color-text); }
         #resume-page[data-theme="a"] .entry-header .header-item { color: var(--color-text); }
-        #resume-page[data-theme="a"] .entry-bullets .bullet-item::before,
-        #resume-page[data-theme="a"] .skills-list .bullet-item::before { content: "●"; font-size: 6pt; color: var(--color-text); left: 0.5mm; }
+        #resume-page[data-theme="a"] .entry-bullets .bullet-item:not(.no-marker)::before,
+        #resume-page[data-theme="a"] .skills-list .bullet-item:not(.no-marker)::before {
+            content: "●"; font-size: 6pt; color: var(--color-text); left: 0.5mm;
+        }
         #resume-page[data-theme="a"] #profile-name { color: var(--color-text); }
         #resume-page[data-theme="a"] #contact-info { color: var(--color-text); }
 
         #resume-page[data-theme="b"] {
-            --color-text: #1a1a1a;
-            --color-muted: #555;
-            --color-divider: #1a1a1a;
+            --color-text: #1a1a1a; --color-muted: #555; --color-divider: #1a1a1a;
             font-family: "Resume Latin", "Times New Roman", "SimSun", "宋体", serif;
         }
         #resume-page[data-theme="b"] #resume-content { text-align: justify; text-justify: inter-ideograph; }
         #resume-page[data-theme="b"] .section-title {
-            border-bottom-color: var(--color-divider);
-            color: var(--color-text);
+            border-bottom-color: var(--color-divider); color: var(--color-text);
             font-family: "Resume Latin", "Times New Roman", "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif;
         }
         #resume-page[data-theme="b"] .entry-header .header-item { color: var(--color-text); }
-        #resume-page[data-theme="b"] .entry-bullets .bullet-item::before,
-        #resume-page[data-theme="b"] .skills-list .bullet-item::before { content: "●"; font-size: 6pt; color: var(--color-text); left: 0.5mm; }
+        #resume-page[data-theme="b"] .entry-bullets .bullet-item:not(.no-marker)::before,
+        #resume-page[data-theme="b"] .skills-list .bullet-item:not(.no-marker)::before {
+            content: "●"; font-size: 6pt; color: var(--color-text); left: 0.5mm;
+        }
         #resume-page[data-theme="b"] #profile-name { color: var(--color-text); }
         #resume-page[data-theme="b"] #contact-info { color: var(--color-text); }
         #resume-page[data-theme="b"] .contact-item + .contact-item::before { content: " ｜ "; color: var(--color-muted); }
 
         #resume-page[data-theme="c"] {
-            --color-text: #1a1a1a;
-            --color-muted: #555;
-            --color-divider: #1a1a1a;
+            --color-text: #1a1a1a; --color-muted: #555; --color-divider: #1a1a1a;
             font-family: "Resume Latin", "Times New Roman", "Source Han Serif VF", "思源宋体 VF", "Noto Serif CJK SC", "SimSun", serif;
         }
         #resume-page[data-theme="c"] #resume-content { text-align: justify; text-justify: inter-ideograph; font-weight: 500; }
         #resume-page[data-theme="c"] .section-title {
-            border-bottom-color: var(--color-divider);
-            color: var(--color-text);
+            border-bottom-color: var(--color-divider); color: var(--color-text);
             font-family: "Resume Latin", "Times New Roman", "Source Han Sans VF", "思源黑体 VF", "PingFang SC", "Microsoft YaHei", sans-serif;
         }
         #resume-page[data-theme="c"] .entry-header .header-item { color: var(--color-text); }
-        #resume-page[data-theme="c"] .entry-bullets .bullet-item::before,
-        #resume-page[data-theme="c"] .skills-list .bullet-item::before { content: "●"; font-size: 6pt; color: var(--color-text); left: 0.5mm; }
+        #resume-page[data-theme="c"] .entry-bullets .bullet-item:not(.no-marker)::before,
+        #resume-page[data-theme="c"] .skills-list .bullet-item:not(.no-marker)::before {
+            content: "●"; font-size: 6pt; color: var(--color-text); left: 0.5mm;
+        }
         #resume-page[data-theme="c"] #profile-name { color: var(--color-text); }
         #resume-page[data-theme="c"] #contact-info { color: var(--color-text); }
         #resume-page[data-theme="c"] .contact-item + .contact-item::before { content: " ｜ "; color: var(--color-muted); }
 
         #resume-page[data-theme="d"] {
-            --color-text: #111;
-            --color-muted: #333;
-            --color-academic: #123f73;
+            --color-text: #111; --color-muted: #333; --color-academic: #123f73;
             --color-divider: var(--color-academic);
             font-family: "Resume Latin", "Times New Roman", "HYQiHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
         #resume-page[data-theme="d"] #resume-content { text-align: justify; text-justify: inter-ideograph; font-weight: 400; }
         #resume-page[data-theme="d"] .section-title {
-            border-bottom-color: var(--color-divider);
-            color: var(--color-academic);
+            border-bottom-color: var(--color-divider); color: var(--color-academic);
             font-family: "Resume Latin", "Times New Roman", "HYZhongHeiKW", "Hiragino Sans GB", "PingFang SC", sans-serif;
         }
         #resume-page[data-theme="d"] .entry-header .header-item { color: var(--color-academic); }
-        #resume-page[data-theme="d"] .entry-bullets .bullet-item::before,
-        #resume-page[data-theme="d"] .skills-list .bullet-item::before {
+        #resume-page[data-theme="d"] .entry-bullets .bullet-item:not(.no-marker)::before,
+        #resume-page[data-theme="d"] .skills-list .bullet-item:not(.no-marker)::before {
             content: "●"; left: 0.5mm; font-size: 6pt; color: var(--color-text);
         }
         #resume-page[data-theme="d"] #profile-name { color: #080808; }
@@ -644,13 +489,13 @@
             overflow-x: auto; white-space: pre-wrap; word-break: break-all;
             margin: 6px 0 12px 0; border: 1px solid #e9ecf0;
         }
-        .modal-body .code-block .highlight { background: #fef3c7; padding: 0 2px; border-radius: 2px; }
         .modal-body .note {
             background: #f0f7ff; border-left: 4px solid #1a5cff;
             padding: 10px 16px; border-radius: 4px; margin: 12px 0;
             font-size: 13px; color: #1e293b;
         }
         .modal-body .note strong { color: #1a5cff; }
+        .modal-body .note.warn { border-left-color: #dc2626; background: #fef2f2; }
 
         .ai-prompt-section {
             background: #fafbfc; border: 2px solid #1a5cff; border-radius: 10px;
@@ -681,7 +526,6 @@
             flex-shrink: 0; background: #fafbfc;
         }
         .modal-footer .btn { padding: 6px 20px; font-size: 13px; }
-
         .scroll-anchor { scroll-margin-top: 20px; }
     </style>
 </head>
@@ -816,9 +660,7 @@
                 if (isUndoRedo) return;
                 const current = textarea.value;
                 if (history.length > 0 && history[historyIndex] === current) return;
-                if (historyIndex < history.length - 1) {
-                    history = history.slice(0, historyIndex + 1);
-                }
+                if (historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
                 history.push(current);
                 if (history.length > MAX_HISTORY) history.shift();
                 historyIndex = history.length - 1;
@@ -868,164 +710,138 @@
 
             setTimeout(saveHistory, 100);
 
-            function trimLines(str) {
-                return str.replace(/^[ \t]+/gm, '');
-            }
+            function trimLines(str) { return str.replace(/^[ \t]+/gm, ''); }
 
             const fullSpec = trimLines(`
-                <h3>一、头部信息（姓名、联系方式、求职方向）</h3>
+                <h3>一、头部信息</h3>
                 <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
-                    <thead>
-                        <tr style="background:#f1f4f9;">
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:15%;">元素</th>
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:35%;">格式</th>
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:50%;">示例</th>
-                        </tr>
-                    </thead>
+                    <thead><tr style="background:#f1f4f9;">
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:15%;">元素</th>
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:35%;">格式</th>
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:50%;">示例</th>
+                    </tr></thead>
                     <tbody>
                         <tr>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;">姓名</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">以 <code># </code>（井号 + 空格）开头，单独占一行</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">以 <code># </code> 开头，单独占一行</td>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code># 张三</code></td>
                         </tr>
                         <tr>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;">联系方式</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">紧接在姓名行之后，用 <strong>|</strong>（<strong>英文半角竖线</strong>）分隔多个项目</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>电话: 138-0000-0000 | 邮箱: san@email.com | 地址: 北京</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">紧接姓名行之后，用 <strong>|</strong> 分隔</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>电话: 138-xxx | 邮箱: san@a.com</code></td>
                         </tr>
                         <tr>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;">求职方向</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">紧接在联系方式行之后，另起一行，<strong>不以 <code>#</code>、<code>-</code>、<code>*</code> 开头</strong>的纯文本</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>求职方向：全栈开发工程师 / 技术经理</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">紧接联系方式行之后，不以 <code>#</code>、<code>-</code>、<code>*</code>、<code>+</code> 开头</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>求职方向：全栈工程师</code></td>
                         </tr>
                     </tbody>
                 </table>
 
                 <h3>二、一级标题（版块名称）</h3>
+                <p style="font-size:13px; color:#666;">以 <code># </code> 开头，生成带下划线的版块标题。</p>
                 <div class="code-block"># 教育背景
                 # 工作经历
-                # 项目经历
-                # 专业技能</div>
+                # 项目经历</div>
 
                 <h3>三、二级标题（条目）</h3>
-                <p style="font-size:13px; color:#666; margin-bottom:6px;">二级标题以 <code>## </code> 开头，使用 <code>|</code>（<strong>英文半角竖线</strong>）分隔各栏。</p>
-                <div class="note" style="margin-bottom:10px;">
-                    <strong>重要：二级标题最多为三栏，即一栏、二栏或三栏。不存在四栏或以上的情况。</strong>
-                </div>
+                <p style="font-size:13px; color:#666;">以 <code>## </code> 开头，用 <code>|</code>（<strong>英文半角竖线</strong>）分隔，<strong>最多三栏</strong>。</p>
                 <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
-                    <thead>
-                        <tr style="background:#f1f4f9;">
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">分隔后段数</th>
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">栏数</th>
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">对齐方式</th>
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">适用场景</th>
-                        </tr>
-                    </thead>
+                    <thead><tr style="background:#f1f4f9;">
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">段数</th>
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">栏数</th>
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">对齐方式</th>
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">适用</th>
+                    </tr></thead>
                     <tbody>
-                        <tr>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">1 段</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">一栏</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">左对齐</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">较少使用</td>
-                        </tr>
-                        <tr>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">2 段</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">两栏</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">左对齐、右对齐</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">适用于「校园经历」等</td>
-                        </tr>
-                        <tr>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">3 段</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">三栏</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">左对齐、居中对齐、右对齐</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">适用于「教育背景」「实习经历」「工作经历」「项目经历」等</td>
-                        </tr>
+                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">1 段</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">一栏</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">左对齐</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">少用</td></tr>
+                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">2 段</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">两栏</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">左、右</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">校园经历</td></tr>
+                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">3 段</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">三栏</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">左、中、右</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">教育、实习、工作、项目</td></tr>
                     </tbody>
                 </table>
                 <div class="code-block">## 学生会主席 | 2023 – 2024
-                ## 复旦大学 | 计算机科学硕士 | 2023 – 2026
-                ## 字节跳动 | 高级全栈工程师 | 2022 – 至今</div>
-                <div class="note" style="margin-bottom:6px;">
-                    <strong>关键规则：</strong><br>
-                    • 各栏之间用 <code>|</code>（<strong>英文半角竖线</strong>）分隔<br>
-                    • <code>|</code> 前后的空格可有可无，系统会自动去除<br>
-                    • 2 段 → 两栏；3 段 → 三栏<br>
-                    • 时间栏固定约占整行宽度的 20%<br>
-                    • 系统会自动检测每行文本是否溢出，并动态调整列宽
-                </div>
-                <div class="note" style="border-left-color:#dc2626; background:#fef2f2;">
-                    <strong>⚠️ 注意：</strong> <code>|</code> 必须是<strong>英文半角</strong>竖线（ASCII 124），中文全角竖线 <code>｜</code> 不会被识别。
+                ## 复旦大学 | 计算机科学硕士 | 2023 – 2026</div>
+                <div class="note warn">
+                    <strong>⚠️ 注意：</strong> <code>|</code> 必须是<strong>英文半角</strong>竖线，中文全角 <code>｜</code> 不会被识别。
                 </div>
 
-                <h3>四、列表项（条目下的具体描述）</h3>
-                <div class="code-block">- 负责活动策划与执行，参与人数 200+
-                - 统筹宣传矩阵，公众号粉丝增长 35%</div>
-                <div class="note" style="margin-bottom:6px;">
+                <h3>四、列表项</h3>
+                <p style="font-size:13px; color:#666;">列表项有三种标记方式，均保持同一缩进级别：</p>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
+                    <thead><tr style="background:#f1f4f9;">
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:22%;">标记</th>
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:78%;">效果</th>
+                    </tr></thead>
+                    <tbody>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>- 文本</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">带圆点项目符号（●），文字缩进对齐</td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>* 文本</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">与 <code>- </code> 完全相同</td>
+                        </tr>
+                        <tr style="background:#f0f7ff;">
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>+ 文本</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>无项目符号</strong>，但保持与列表项相同的字号和行距，<strong>文字直接顶格显示</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-block">- 带符号的列表项（●）
+                * 带符号的列表项（●）
+                + 无符号，顶格显示</div>
+                <div class="note">
                     <strong>补充说明：</strong><br>
-                    • 列表项内容较长时可以直接续写，系统会自动换行并保持缩进对齐。<br>
-                    • 教育背景版块的列表项会自动顶格显示，无项目符号。<br>
-                    • 如需额外增加缩进，可以使用工具栏的「⇥ 缩进」按钮，会在行首插入 2 个全角空格。
+                    • <code>+ </code> 标记适合用于补充说明、备注、无符号的子标题等场景。<br>
+                    • 教育背景版块的所有列表项（无论用 <code>-</code>、<code>*</code> 还是 <code>+</code>）都会自动顶格显示，无符号。<br>
+                    • 如需额外缩进，可使用工具栏的「⇥ 缩进」按钮（插入 2 个全角空格）。
                 </div>
 
                 <h3>五、加粗和斜体</h3>
-                <div class="note" style="border-left-color:#dc2626; background:#fef2f2; margin-bottom:10px;">
-                    <strong>⚠️ 重要：请使用 HTML 标签来实现加粗和斜体，不要使用 Markdown 标记（<code>**</code> 和 <code>*</code>）。</strong>
+                <div class="note warn">
+                    <strong>⚠️ 请使用 HTML 标签，不要使用 Markdown 标记（<code>**</code> 和 <code>*</code>）。</strong>
                 </div>
                 <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
-                    <thead>
-                        <tr style="background:#f1f4f9;">
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">样式</th>
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">使用标签</th>
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">示例</th>
-                        </tr>
-                    </thead>
+                    <thead><tr style="background:#f1f4f9;">
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">样式</th>
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">标签</th>
+                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">示例</th>
+                    </tr></thead>
                     <tbody>
                         <tr>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;">加粗</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;strong&gt;</code> 和 <code>&lt;/strong&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;strong&gt;...&lt;/strong&gt;</code></td>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;strong&gt;核心课程&lt;/strong&gt;</code></td>
                         </tr>
                         <tr>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;">斜体</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;em&gt;</code> 和 <code>&lt;/em&gt;</code></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;em&gt;...&lt;/em&gt;</code></td>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;em&gt;详见附件&lt;/em&gt;</code></td>
                         </tr>
                     </tbody>
                 </table>
 
                 <h3>六、字体和字号</h3>
-                <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
-                    <thead>
-                        <tr style="background:#f1f4f9;">
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">样式</th>
-                            <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">使用标签</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">字体</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;span style="font-family: '字体名';"&gt;...&lt;/span&gt;</code></td>
-                        </tr>
-                        <tr>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">字号</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;span style="font-size: Xpt;"&gt;...&lt;/span&gt;</code></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <p style="font-size:13px; color:#666;">使用 <code>&lt;span style="..."&gt;...&lt;/span&gt;</code> 包裹文字。</p>
+                <div class="code-block">&lt;span style="font-family: 'Georgia';"&gt;英文字体&lt;/span&gt;
+                &lt;span style="font-size: 14pt;"&gt;放大文字&lt;/span&gt;
+                &lt;span style="font-family: 'Arial'; font-size: 16pt;"&gt;组合样式&lt;/span&gt;</div>
 
                 <h3>七、完整示例</h3>
                 <div class="code-block"># 张三
-                电话: 138-0000-0000 | 邮箱: san.zhang@email.com | 地址: 北京
-                求职方向：全栈开发工程师 / 技术经理
+                电话: 138-0000-0000 | 邮箱: san@a.com | 地址: 北京
+                求职方向：全栈开发工程师
 
                 # 教育背景
                 ## 北京大学 | 计算机科学硕士 | 2022 – 2025
                 - 研究方向：<strong>分布式系统</strong>
-                - GPA: 3.8/4.0
+                + GPA: 3.8/4.0
 
                 # 工作经历
                 ## 字节跳动 | 高级全栈工程师 | 2022 – 至今
-                - 主导电商后台重构，接口响应时间降低 <span style="font-size: 14pt;">40%</span>
+                - 主导电商后台重构，响应时间降低 <span style="font-size: 14pt;">40%</span>
+                + 项目周期：6 个月
 
                 # 专业技能
                 - 前端: React, Vue, TypeScript
@@ -1037,13 +853,19 @@
                         <button class="copy-ai-btn" id="copyAiBtn" onclick="copyAIPrompt()">📋 复制此段</button>
                     </div>
                     <div class="ai-note">
-                        <p style="font-weight:600; margin-bottom:6px;">如果你是将此规范交给 AI 生成简历文本，请务必阅读以下提醒：</p>
+                        <p style="font-weight:600; margin-bottom:6px;">请严格按照以下规则生成简历文本：</p>
                         <ol style="padding-left:20px; margin:0;">
-                            <li><strong>你只需生成纯文本内容</strong>：一级标题用 <code># </code>，二级标题用 <code>## </code>，列表项用 <code>- </code>，以及需要强调的文字处添加 HTML 标签。</li>
-                            <li><strong>不要添加额外的排版符号</strong>：不需要添加空格缩进、换行符对齐等，因为本系统会自动排版。</li>
-                            <li><strong>加粗和斜体请使用 HTML 标签</strong>：加粗用 <code>&lt;strong&gt;</code>，斜体用 <code>&lt;em&gt;</code>，<strong>不要使用 <code>**</code> 和 <code>*</code></strong>。</li>
-                            <li><strong>二级标题最多三栏</strong>：用 <code>|</code> 分隔后，最多只能有 3 段。</li>
-                            <li><strong><code>|</code> 必须使用英文半角竖线</strong>：即 Shift + \ 输入的 <code>|</code>。</li>
+                            <li><strong>一级标题</strong>用 <code># </code>（井号 + 空格）开头。</li>
+                            <li><strong>二级标题</strong>用 <code>## </code> 开头，各栏之间用 <code>|</code>（<strong>英文半角竖线</strong>）分隔，最多 3 栏，不要超过。</li>
+                            <li><strong>列表项</strong>有三种写法：
+                                <ul style="padding-left:20px; margin:2px 0;">
+                                    <li><code>- 文本</code> 或 <code>* 文本</code> → 带圆点符号</li>
+                                    <li><code>+ 文本</code> → <strong>无符号，顶格显示</strong>，适合补充说明</li>
+                                </ul>
+                            </li>
+                            <li><strong>加粗</strong>用 <code>&lt;strong&gt;...&lt;/strong&gt;</code>，<strong>斜体</strong>用 <code>&lt;em&gt;...&lt;/em&gt;</code>；<strong>不要使用</strong> <code>**</code> 或 <code>*</code> 作为加粗斜体标记。</li>
+                            <li><strong>字体和字号</strong>用 <code>&lt;span style="..."&gt;...&lt;/span&gt;</code> 包裹。</li>
+                            <li><strong>不要添加额外的排版符号</strong>：不要添加空格缩进、换行对齐等，本系统会自动排版。</li>
                         </ol>
                     </div>
                 </div>
@@ -1067,13 +889,13 @@
                     }
                     if (foundName && !foundContact) {
                         if (trimmed === '') continue;
-                        if (trimmed.startsWith('#') || trimmed.startsWith('-') || trimmed.startsWith('*')) break;
+                        if (/^[#\-*+]/.test(trimmed)) break;
                         contactLine = trimmed;
                         foundContact = true;
                         for (let j = i + 1; j < lines.length; j++) {
                             const next = lines[j].trim();
                             if (next === '') continue;
-                            if (next.startsWith('#') || next.startsWith('-') || next.startsWith('*')) break;
+                            if (/^[#\-*+]/.test(next)) break;
                             result.jobTargetLines.push(next);
                         }
                         break;
@@ -1091,7 +913,7 @@
 
                 function isH1(line) { return /^#\s+\S/.test(line.trim()) && !/^##\s+/.test(line.trim()); }
                 function isH2(line) { return /^##\s+\S/.test(line.trim()); }
-                function isBullet(line) { return /^[-*]\s+/.test(line.trim()); }
+                function isBullet(line) { return /^[-*+]\s+/.test(line.trim()); }
 
                 function parseH2(line) {
                     const content = line.replace(/^##\s+/, '').trim();
@@ -1130,8 +952,10 @@
 
                     if (isBullet(line)) {
                         if (!currentEntry) { currentEntry = { fields: [], bullets: [] }; }
-                        const bulletText = trimmed.replace(/^[-*]\s+/, '').trim();
-                        currentEntry.bullets.push({ text: bulletText });
+                        // 判断标记类型：+ 表示无符号
+                        const isNoMarker = /^\+/.test(trimmed);
+                        const bulletText = trimmed.replace(/^[-*+]\s+/, '').trim();
+                        currentEntry.bullets.push({ text: bulletText, noMarker: isNoMarker });
                         continue;
                     }
                 }
@@ -1153,7 +977,6 @@
                 const style = getComputedStyle(page);
                 const paddingTop = parseFloat(style.paddingTop) || 0;
                 const paddingBottom = parseFloat(style.paddingBottom) || 0;
-
                 const rect = page.getBoundingClientRect();
                 if (rect.width === 0) return;
                 const mmToPx = rect.width / 210;
@@ -1189,16 +1012,12 @@
                 threeColHeaders.forEach(header => {
                     header.style.gridTemplateColumns = '1fr 1fr 1fr';
                     void header.offsetHeight;
-
                     const items = header.querySelectorAll('.header-item');
                     if (items.length < 3) return;
-
                     const col1 = items[0];
                     const col2 = items[1];
-
                     const col1Overflow = col1.scrollWidth > col1.clientWidth + 2;
                     const col2Overflow = col2.scrollWidth > col2.clientWidth + 2;
-
                     if (col1Overflow && col2Overflow) {
                         header.style.gridTemplateColumns = '1.8fr 1.8fr 1fr';
                     } else if (col1Overflow) {
@@ -1229,9 +1048,7 @@
             function setupPhotoUpload() {
                 const container = document.getElementById('photo-container');
                 if (!container) return;
-                container.addEventListener('click', function() {
-                    photoInput.click();
-                });
+                container.addEventListener('click', function() { photoInput.click(); });
             }
 
             function render() {
@@ -1287,7 +1104,8 @@
                         if (entry.bullets && entry.bullets.length) {
                             sectionsHTML += `<ul class="entry-bullets">`;
                             for (const b of entry.bullets) {
-                                sectionsHTML += `<li class="bullet-item">${b.text}</li>`;
+                                const cls = b.noMarker ? 'bullet-item no-marker' : 'bullet-item';
+                                sectionsHTML += `<li class="${cls}">${b.text}</li>`;
                             }
                             sectionsHTML += `</ul>`;
                         }
@@ -1305,10 +1123,7 @@
                 requestAnimationFrame(() => {
                     setupPhotoUpload();
                     adjustColumnWidths();
-                    setTimeout(() => {
-                        adjustColumnWidths();
-                        insertPageBreaks();
-                    }, 20);
+                    setTimeout(() => { adjustColumnWidths(); insertPageBreaks(); }, 20);
                 });
             }
 
@@ -1321,10 +1136,7 @@
             window.setHeaderAlign = function() {
                 const align = document.getElementById('alignSelect').value;
                 resumePage.setAttribute('data-align', align);
-                requestAnimationFrame(() => {
-                    adjustColumnWidths();
-                    insertPageBreaks();
-                });
+                requestAnimationFrame(() => { adjustColumnWidths(); insertPageBreaks(); });
             };
 
             window.setPhotoEnabled = function() {
@@ -1341,48 +1153,42 @@
                 # 教育背景
                 ## University of Cambridge | Master of Philosophy in Data Science | Oct 2023 – Sep 2024
                 - 研究方向：机器学习与因果推断
-                - 毕业论文获系优秀论文提名
+                + GPA: 3.9/4.0
                 ## London School of Economics | Bachelor of Science in Economics | Sep 2019 – Jun 2023
                 - 一等荣誉学位 (First Class Honours)
-                - 核心课程：计量经济学、行为经济学、运筹学
+                + 核心课程：计量经济学、行为经济学
 
                 # 校园经历
                 ## 剑桥中国学联 | 副主席 | Oct 2023 – Sep 2024
-                - 策划并执行 8 场学术讲座与职业分享会，累计参与 500+ 人次
+                - 策划并执行 8 场学术讲座，累计参与 500+ 人次
                 - 统筹学联宣传矩阵，公众号粉丝增长 35%
                 ## LSE 经济学社 | 学术部部长 | Sep 2021 – Jun 2023
                 - 组织 12 场学术沙龙，邀请教授与业界嘉宾共 9 人
-                - 主编学社年刊，收录论文 15 篇
 
                 # 实习经历
                 ## McKinsey & Company | 战略咨询实习生 | Jun 2024 – Sep 2024
-                - 参与某消费品牌数字化转型项目，协助完成市场调研与竞品分析
-                - 基于 Python 处理 10 万+ 条销售数据，输出可视化看板
+                - 参与消费品牌数字化转型项目，协助完成市场调研与竞品分析
+                + 项目周期：3 个月，每周投入 40 小时
                 ## L'Oréal China | 市场分析实习生 | Dec 2023 – Feb 2024
                 - 协助跟进 2024 年货节活动，参与定价策略与流量监测
                 - 利用 SQL 提取用户行为数据，输出周报驱动运营决策
-                ## 招商证券 | 行业研究实习生 | Jul 2022 – Sep 2022
-                - 覆盖消费品与零售赛道，协助撰写 3 份深度行业研究报告
-                - 负责数据收集与更新，搭建财务预测模型
 
                 # 项目经历
                 ## Carbon Footprint Tracker App | 产品设计负责人 | Jan 2025 – Apr 2025
                 - 设计并开发碳足迹追踪工具，集成用户出行与消费数据
-                - 完成用户调研与原型测试，累计收集有效问卷 200+ 份
+                + 用户调研有效问卷 200+ 份
                 ## E-commerce Recommendation System | 项目成员 | Oct 2023 – Dec 2023
                 - 基于协同过滤与 LightGBM 构建电商推荐模型，AUC 达 0.87
-                - 撰写项目白皮书，获学院科研展示日最佳展示奖
 
                 # 专业技能
                 - 数据分析: Python, R, SQL, Tableau
                 - 产品工具: Figma, Miro, Notion, Jira
-                - 语言: 中文 (母语), 英语 (IELTS 8.0), 法语 (基础)
+                - 语言: 中文 (母语), 英语 (IELTS 8.0)
             `);
 
             window.loadExample = function() {
                 textarea.value = exampleContent;
-                history = [];
-                historyIndex = -1;
+                history = []; historyIndex = -1;
                 saveHistory();
                 render();
             };
@@ -1398,10 +1204,7 @@
                         btn.textContent = '📋 复制';
                         btn.classList.remove('copy-success');
                     }, 2000);
-                }).catch(() => {
-                    textarea.select();
-                    document.execCommand('copy');
-                });
+                }).catch(() => { textarea.select(); document.execCommand('copy'); });
             };
 
             window.downloadMarkdown = function() {
@@ -1410,12 +1213,9 @@
                 const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url;
-                a.download = 'resume.md';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+                a.href = url; a.download = 'resume.md';
+                document.body.appendChild(a); a.click();
+                document.body.removeChild(a); URL.revokeObjectURL(url);
             };
 
             window.openModal = function() {
@@ -1531,23 +1331,17 @@
                     let lineEnd = after.indexOf('\n');
                     if (lineEnd === -1) lineEnd = textarea.value.length;
                     else lineEnd = end + lineEnd;
-
-                    const newValue = textarea.value.substring(0, lineStart) + INDENT + textarea.value.substring(lineStart);
-                    textarea.value = newValue;
+                    textarea.value = textarea.value.substring(0, lineStart) + INDENT + textarea.value.substring(lineStart);
                     textarea.selectionStart = textarea.selectionEnd = start + INDENT.length;
                 } else {
                     const selected = textarea.value.substring(start, end);
                     const lines = selected.split('\n');
-                    const newLines = lines.map(line => {
-                        if (line.trim() === '') return line;
-                        return INDENT + line;
-                    });
+                    const newLines = lines.map(line => line.trim() === '' ? line : INDENT + line);
                     const newText = newLines.join('\n');
                     textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
                     textarea.selectionStart = start;
                     textarea.selectionEnd = start + newText.length;
                 }
-
                 textarea.focus();
                 render();
                 clearTimeout(saveTimer);
@@ -1603,20 +1397,14 @@
                 const selected = textarea.value.substring(start, end);
                 const spanRegex = /^<span style="([^"]*)">(.*)<\/span>$/s;
                 const match = selected.match(spanRegex);
-                if (!match) {
-                    alert('当前选中的文本没有样式可移除。');
-                    return;
-                }
+                if (!match) { alert('当前选中的文本没有样式可移除。'); return; }
                 let style = match[1];
                 const inner = match[2];
                 const propRegex = new RegExp(`${property}\\s*:\\s*[^;]+;?`);
                 style = style.replace(propRegex, '').replace(/;;/g, ';').replace(/;\s*$/, '');
                 let newText;
-                if (style.trim() === '') {
-                    newText = inner;
-                } else {
-                    newText = `<span style="${style}">${inner}</span>`;
-                }
+                if (style.trim() === '') newText = inner;
+                else newText = `<span style="${style}">${inner}</span>`;
                 textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
                 textarea.selectionStart = start;
                 textarea.selectionEnd = start + newText.length;
@@ -1630,17 +1418,12 @@
             loadExample();
             setTheme('d');
 
-            themeSelector.addEventListener('change', function(e) {
-                setTheme(e.target.value);
-            });
+            themeSelector.addEventListener('change', function(e) { setTheme(e.target.value); });
 
             let resizeTimer;
             window.addEventListener('resize', function() {
                 clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    adjustColumnWidths();
-                    insertPageBreaks();
-                }, 200);
+                resizeTimer = setTimeout(() => { adjustColumnWidths(); insertPageBreaks(); }, 200);
             });
 
         })();
