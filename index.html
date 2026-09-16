@@ -121,7 +121,54 @@
         .format-toolbar select:focus {
             border-color: #1a5cff; box-shadow: 0 0 0 2px rgba(26,92,255,0.2);
         }
-        .format-toolbar label { font-size: 12px; color: #475467; }
+        .format-toolbar label { font-size: 12px; color: #475467; white-space: nowrap; }
+
+        .margin-group {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 8px;
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+        }
+        .margin-group .margin-item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .margin-group .margin-item .margin-label {
+            font-size: 11px;
+            color: #999;
+            font-weight: 500;
+        }
+        .margin-group .margin-item input {
+            width: 28px;
+            padding: 1px 2px;
+            border: none;
+            border-bottom: 1px solid #e0e4e8;
+            background: transparent;
+            font-size: 11px;
+            text-align: center;
+            font-family: inherit;
+            color: #1e293b;
+            outline: none;
+            -moz-appearance: textfield;
+        }
+        .margin-group .margin-item input::-webkit-outer-spin-button,
+        .margin-group .margin-item input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .margin-group .margin-item input:focus {
+            border-bottom-color: #1a5cff;
+            color: #1a5cff;
+        }
+        .margin-group .unit {
+            font-size: 11px;
+            color: #999;
+            margin-left: 2px;
+        }
 
         #markdown-input {
             flex: 1; padding: 16px; border: none; outline: none; resize: none;
@@ -282,7 +329,6 @@
         #resume-page[data-theme] .entry-header.three-col .header-item:nth-child(2) { text-align: center; }
         #resume-page[data-theme] .entry-header.three-col .header-item:nth-child(3) { text-align: right; }
 
-        /* ===== 列表通用样式 ===== */
         .entry-bullets, .skills-list { list-style: none; padding: 0; margin: 0; }
         .entry-bullets .bullet-item,
         .skills-list .bullet-item {
@@ -301,8 +347,6 @@
         }
         .skills-list .bullet-item { padding-left: 3mm; }
 
-        /* ===== 无符号列表项（用 + 标记） ===== */
-        /* 保持与普通列表项同级的行距和字号，但去掉缩进和符号 */
         #resume-page[data-theme] .entry-bullets .bullet-item.no-marker,
         #resume-page[data-theme] .skills-list .bullet-item.no-marker {
             padding-left: 0 !important;
@@ -314,7 +358,6 @@
             display: none !important;
         }
 
-        /* ===== 教育背景的列表项：无符号、顶格（保留兼容原有规则） ===== */
         #resume-page[data-theme] .resume-section[data-section-type="education"] .entry-bullets .bullet-item {
             padding-left: 0 !important;
             font-size: 9pt; line-height: 1.28; margin-bottom: 0;
@@ -323,6 +366,21 @@
         #resume-page[data-theme] .resume-section[data-section-type="education"] .entry-bullets .bullet-item::before {
             content: none !important;
             display: none !important;
+        }
+
+        /* ===== 技能背景：仅在拆分模式下使用 6:4 两栏 ===== */
+        #resume-page[data-theme][data-skills-split="true"] .resume-section[data-section-type="skills"] .entry-bullets {
+            display: grid;
+            grid-template-columns: 6fr 4fr;
+            column-gap: 6mm;
+            row-gap: 0.1mm;
+            align-items: start;
+        }
+        #resume-page[data-theme] .resume-section[data-section-type="skills"] .entry-bullets .bullet-item {
+            margin-bottom: 0;
+        }
+        #resume-page[data-theme] .resume-section[data-section-type="skills"] .entry-bullets .bullet-item.no-marker {
+            padding-left: 0 !important;
         }
 
         .resume-section[data-section-type="experience"] .resume-entry { margin-bottom: 1.1mm; }
@@ -460,7 +518,6 @@
             cursor: pointer; padding: 0 4px; line-height: 1; transition: color 0.15s;
         }
         .modal-header .modal-close:hover { color: #1a1a1a; }
-
         .modal-nav {
             display: flex; align-items: center; gap: 8px;
             padding: 10px 24px; background: #f8f9fc;
@@ -475,7 +532,6 @@
         .modal-nav .nav-btn.active-nav { background: #e8f0fe; border-color: #1a5cff; color: #1a5cff; }
         .modal-nav .nav-divider { width: 1px; height: 20px; background: #d0d7de; }
         .modal-nav .nav-hint { font-size: 12px; color: #999; margin-left: auto; }
-
         .modal-body {
             padding: 24px 28px; overflow-y: auto; flex: 1;
             font-size: 14px; line-height: 1.8; color: #1e293b; scroll-behavior: smooth;
@@ -496,7 +552,6 @@
         }
         .modal-body .note strong { color: #1a5cff; }
         .modal-body .note.warn { border-left-color: #dc2626; background: #fef2f2; }
-
         .ai-prompt-section {
             background: #fafbfc; border: 2px solid #1a5cff; border-radius: 10px;
             padding: 16px 20px; margin: 20px 0 10px 0; position: relative;
@@ -519,7 +574,6 @@
             border-color: #0f973d; color: #0f973d; background: #e8f5ee;
         }
         .ai-prompt-section .ai-note { font-size: 14px; line-height: 1.8; color: #1e293b; }
-
         .modal-footer {
             padding: 14px 24px; border-top: 1px solid #e9ecf0;
             display: flex; justify-content: flex-end; gap: 10px;
@@ -602,6 +656,33 @@
                     <option value="false" selected>无照片</option>
                     <option value="true">有照片</option>
                 </select>
+                <span class="separator"></span>
+                <label>页边距</label>
+                <div class="margin-group">
+                    <div class="margin-item" title="上边距">
+                        <span class="margin-label">↑</span>
+                        <input type="number" id="marginTop" value="4" min="0" max="30" step="1">
+                    </div>
+                    <div class="margin-item" title="下边距">
+                        <span class="margin-label">↓</span>
+                        <input type="number" id="marginBottom" value="6" min="0" max="30" step="1">
+                    </div>
+                    <div class="margin-item" title="左边距">
+                        <span class="margin-label">←</span>
+                        <input type="number" id="marginLeft" value="10" min="0" max="30" step="1">
+                    </div>
+                    <div class="margin-item" title="右边距">
+                        <span class="margin-label">→</span>
+                        <input type="number" id="marginRight" value="10" min="0" max="30" step="1">
+                    </div>
+                    <span class="unit">mm</span>
+                </div>
+                <span class="separator"></span>
+                <label>技能分栏</label>
+                <select id="skillsSplitSelect" onchange="setSkillsSplit()">
+                    <option value="true" selected>左右拆分</option>
+                    <option value="false">不拆分</option>
+                </select>
             </div>
 
             <textarea id="markdown-input" placeholder="按格式粘贴..."></textarea>
@@ -613,7 +694,7 @@
                 <span class="theme-indicator" id="themeIndicator">主题 D</span>
             </div>
             <div id="preview-scroll">
-                <div id="resume-page" data-theme="d" data-photo="false" data-align="center">
+                <div id="resume-page" data-theme="d" data-photo="false" data-align="center" data-skills-split="true">
                     <div id="resume-content"></div>
                 </div>
             </div>
@@ -651,6 +732,30 @@
 
             let photoDataUrl = '';
 
+            // ===== 页边距状态 =====
+            const margins = { top: 4, bottom: 6, left: 10, right: 10 };
+
+            function applyMargins() {
+                resumePage.style.setProperty('--page-padding-top', margins.top + 'mm');
+                resumePage.style.setProperty('--page-padding-bottom', margins.bottom + 'mm');
+                resumePage.style.setProperty('--page-padding-left', margins.left + 'mm');
+                resumePage.style.setProperty('--page-padding-right', margins.right + 'mm');
+                requestAnimationFrame(() => {
+                    adjustColumnWidths();
+                    insertPageBreaks();
+                });
+            }
+
+            ['marginTop','marginBottom','marginLeft','marginRight'].forEach(id => {
+                const key = id.replace('margin','').toLowerCase();
+                document.getElementById(id).addEventListener('input', function() {
+                    const val = Math.max(0, Math.min(30, parseFloat(this.value) || 0));
+                    margins[key] = val;
+                    applyMargins();
+                });
+            });
+
+            // ===== 撤回/重做 =====
             let history = [];
             let historyIndex = -1;
             const MAX_HISTORY = 200;
@@ -743,7 +848,7 @@
                 <p style="font-size:13px; color:#666;">以 <code># </code> 开头，生成带下划线的版块标题。</p>
                 <div class="code-block"># 教育背景
                 # 工作经历
-                # 项目经历</div>
+                # 技能背景</div>
 
                 <h3>三、二级标题（条目）</h3>
                 <p style="font-size:13px; color:#666;">以 <code>## </code> 开头，用 <code>|</code>（<strong>英文半角竖线</strong>）分隔，<strong>最多三栏</strong>。</p>
@@ -752,22 +857,16 @@
                         <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">段数</th>
                         <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">栏数</th>
                         <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">对齐方式</th>
-                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">适用</th>
                     </tr></thead>
                     <tbody>
-                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">1 段</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">一栏</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">左对齐</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">少用</td></tr>
-                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">2 段</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">两栏</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">左、右</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">校园经历</td></tr>
-                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">3 段</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">三栏</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">左、中、右</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">教育、实习、工作、项目</td></tr>
+                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">1 段</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">一栏</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">左对齐</td></tr>
+                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">2 段</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">两栏</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">左、右</td></tr>
+                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">3 段</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">三栏</td><td style="border:1px solid #e9ecf0; padding:6px 10px;">左、中、右</td></tr>
                     </tbody>
                 </table>
-                <div class="code-block">## 学生会主席 | 2023 – 2024
-                ## 复旦大学 | 计算机科学硕士 | 2023 – 2026</div>
-                <div class="note warn">
-                    <strong>⚠️ 注意：</strong> <code>|</code> 必须是<strong>英文半角</strong>竖线，中文全角 <code>｜</code> 不会被识别。
-                </div>
+                <div class="code-block">## 复旦大学 | 计算机科学硕士 | 2023 – 2026</div>
 
                 <h3>四、列表项</h3>
-                <p style="font-size:13px; color:#666;">列表项有三种标记方式，均保持同一缩进级别：</p>
                 <table style="width:100%; border-collapse:collapse; font-size:13px; margin:6px 0 12px 0;">
                     <thead><tr style="background:#f1f4f9;">
                         <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left; width:22%;">标记</th>
@@ -776,7 +875,7 @@
                     <tbody>
                         <tr>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>- 文本</code></td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">带圆点项目符号（●），文字缩进对齐</td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">带圆点项目符号（●）</td>
                         </tr>
                         <tr>
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>* 文本</code></td>
@@ -784,18 +883,16 @@
                         </tr>
                         <tr style="background:#f0f7ff;">
                             <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>+ 文本</code></td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>无项目符号</strong>，但保持与列表项相同的字号和行距，<strong>文字直接顶格显示</strong></td>
+                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><strong>无项目符号</strong>，文字顶格显示</td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="code-block">- 带符号的列表项（●）
-                * 带符号的列表项（●）
-                + 无符号，顶格显示</div>
                 <div class="note">
-                    <strong>补充说明：</strong><br>
-                    • <code>+ </code> 标记适合用于补充说明、备注、无符号的子标题等场景。<br>
-                    • 教育背景版块的所有列表项（无论用 <code>-</code>、<code>*</code> 还是 <code>+</code>）都会自动顶格显示，无符号。<br>
-                    • 如需额外缩进，可使用工具栏的「⇥ 缩进」按钮（插入 2 个全角空格）。
+                    <strong>特殊版块：</strong><br>
+                    • <strong>教育背景</strong>的列表项自动无符号、顶格显示<br>
+                    • <strong>技能背景</strong>可在工具栏选择「左右拆分」或「不拆分」<br>
+                    &nbsp;&nbsp;- 左右拆分：6:4 两栏排列，适合短内容<br>
+                    &nbsp;&nbsp;- 不拆分：普通单栏列表，适合长内容
                 </div>
 
                 <h3>五、加粗和斜体</h3>
@@ -806,27 +903,17 @@
                     <thead><tr style="background:#f1f4f9;">
                         <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">样式</th>
                         <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">标签</th>
-                        <th style="border:1px solid #e9ecf0; padding:6px 10px; text-align:left;">示例</th>
                     </tr></thead>
                     <tbody>
-                        <tr>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">加粗</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;strong&gt;...&lt;/strong&gt;</code></td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;strong&gt;核心课程&lt;/strong&gt;</code></td>
-                        </tr>
-                        <tr>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;">斜体</td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;em&gt;...&lt;/em&gt;</code></td>
-                            <td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;em&gt;详见附件&lt;/em&gt;</code></td>
-                        </tr>
+                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">加粗</td><td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;strong&gt;...&lt;/strong&gt;</code></td></tr>
+                        <tr><td style="border:1px solid #e9ecf0; padding:6px 10px;">斜体</td><td style="border:1px solid #e9ecf0; padding:6px 10px;"><code>&lt;em&gt;...&lt;/em&gt;</code></td></tr>
                     </tbody>
                 </table>
 
                 <h3>六、字体和字号</h3>
                 <p style="font-size:13px; color:#666;">使用 <code>&lt;span style="..."&gt;...&lt;/span&gt;</code> 包裹文字。</p>
                 <div class="code-block">&lt;span style="font-family: 'Georgia';"&gt;英文字体&lt;/span&gt;
-                &lt;span style="font-size: 14pt;"&gt;放大文字&lt;/span&gt;
-                &lt;span style="font-family: 'Arial'; font-size: 16pt;"&gt;组合样式&lt;/span&gt;</div>
+                &lt;span style="font-size: 14pt;"&gt;放大文字&lt;/span&gt;</div>
 
                 <h3>七、完整示例</h3>
                 <div class="code-block"># 张三
@@ -838,14 +925,11 @@
                 - 研究方向：<strong>分布式系统</strong>
                 + GPA: 3.8/4.0
 
-                # 工作经历
-                ## 字节跳动 | 高级全栈工程师 | 2022 – 至今
-                - 主导电商后台重构，响应时间降低 <span style="font-size: 14pt;">40%</span>
-                + 项目周期：6 个月
-
-                # 专业技能
-                - 前端: React, Vue, TypeScript
-                - 后端: Node.js, Java, Python</div>
+                # 技能背景
+                - 数据分析: Python, R, SQL, Tableau
+                - 设计工具: Photoshop, Illustrator, Premiere
+                - 办公工具: Word, PowerPoint
+                - 语言: 英语 IELTS 7.0, CET6 509</div>
 
                 <div id="ai-prompt-section" class="ai-prompt-section scroll-anchor">
                     <div class="section-label">
@@ -856,16 +940,16 @@
                         <p style="font-weight:600; margin-bottom:6px;">请严格按照以下规则生成简历文本：</p>
                         <ol style="padding-left:20px; margin:0;">
                             <li><strong>一级标题</strong>用 <code># </code>（井号 + 空格）开头。</li>
-                            <li><strong>二级标题</strong>用 <code>## </code> 开头，各栏之间用 <code>|</code>（<strong>英文半角竖线</strong>）分隔，最多 3 栏，不要超过。</li>
+                            <li><strong>二级标题</strong>用 <code>## </code> 开头，各栏之间用 <code>|</code>（<strong>英文半角竖线</strong>）分隔，最多 3 栏。</li>
                             <li><strong>列表项</strong>有三种写法：
                                 <ul style="padding-left:20px; margin:2px 0;">
                                     <li><code>- 文本</code> 或 <code>* 文本</code> → 带圆点符号</li>
-                                    <li><code>+ 文本</code> → <strong>无符号，顶格显示</strong>，适合补充说明</li>
+                                    <li><code>+ 文本</code> → 无符号，顶格显示</li>
                                 </ul>
                             </li>
-                            <li><strong>加粗</strong>用 <code>&lt;strong&gt;...&lt;/strong&gt;</code>，<strong>斜体</strong>用 <code>&lt;em&gt;...&lt;/em&gt;</code>；<strong>不要使用</strong> <code>**</code> 或 <code>*</code> 作为加粗斜体标记。</li>
+                            <li><strong>加粗</strong>用 <code>&lt;strong&gt;...&lt;/strong&gt;</code>，<strong>斜体</strong>用 <code>&lt;em&gt;...&lt;/em&gt;</code>。</li>
                             <li><strong>字体和字号</strong>用 <code>&lt;span style="..."&gt;...&lt;/span&gt;</code> 包裹。</li>
-                            <li><strong>不要添加额外的排版符号</strong>：不要添加空格缩进、换行对齐等，本系统会自动排版。</li>
+                            <li><strong>不要添加额外的排版符号</strong>：本系统会自动排版。</li>
                         </ol>
                     </div>
                 </div>
@@ -935,6 +1019,7 @@
                         if (lower.includes('教育') || lower.includes('education')) type = 'education';
                         else if (lower.includes('校园') || lower.includes('campus')) type = 'campus';
                         else if (lower.includes('实习') || lower.includes('intern')) type = 'internship';
+                        else if (lower.includes('技能') || lower.includes('skill')) type = 'skills';
                         else if (lower.includes('工作') || lower.includes('经历') || lower.includes('经验') || lower.includes('experience')) type = 'experience';
                         currentSection = { title, type, entries: [] };
                         continue;
@@ -952,7 +1037,6 @@
 
                     if (isBullet(line)) {
                         if (!currentEntry) { currentEntry = { fields: [], bullets: [] }; }
-                        // 判断标记类型：+ 表示无符号
                         const isNoMarker = /^\+/.test(trimmed);
                         const bulletText = trimmed.replace(/^[-*+]\s+/, '').trim();
                         currentEntry.bullets.push({ text: bulletText, noMarker: isNoMarker });
@@ -980,7 +1064,9 @@
                 const rect = page.getBoundingClientRect();
                 if (rect.width === 0) return;
                 const mmToPx = rect.width / 210;
-                const pageHeightPx = 297 * mmToPx;
+
+                const safeMarginMm = 14;
+                const pageHeightPx = (297 - safeMarginMm) * mmToPx;
                 const effectiveHeight = pageHeightPx - (paddingTop + paddingBottom) * mmToPx;
 
                 const children = Array.from(content.children);
@@ -1145,6 +1231,15 @@
                 render();
             };
 
+            window.setSkillsSplit = function() {
+                const val = document.getElementById('skillsSplitSelect').value;
+                resumePage.setAttribute('data-skills-split', val);
+                requestAnimationFrame(() => {
+                    adjustColumnWidths();
+                    insertPageBreaks();
+                });
+            };
+
             const exampleContent = trimLines(`
                 # 陈思远
                 电话: 139-8888-1234 | 邮箱: siyuan.chen@outlook.com | 地址: 杭州
@@ -1180,10 +1275,11 @@
                 ## E-commerce Recommendation System | 项目成员 | Oct 2023 – Dec 2023
                 - 基于协同过滤与 LightGBM 构建电商推荐模型，AUC 达 0.87
 
-                # 专业技能
-                - 数据分析: Python, R, SQL, Tableau
-                - 产品工具: Figma, Miro, Notion, Jira
-                - 语言: 中文 (母语), 英语 (IELTS 8.0)
+                # 技能背景
+                - 数据分析: Excel（数据透视表、VLOOKUP）、SPSS、Python
+                - 设计工具: Photoshop、Illustrator、Premiere、After Effects
+                - 办公工具: Word、PowerPoint
+                - 语言: 英语 IELTS 7.0，CET6 509
             `);
 
             window.loadExample = function() {
@@ -1326,13 +1422,11 @@
 
                 if (start === end) {
                     const before = textarea.value.substring(0, start);
-                    const after = textarea.value.substring(end);
                     const lineStart = before.lastIndexOf('\n') + 1;
-                    let lineEnd = after.indexOf('\n');
-                    if (lineEnd === -1) lineEnd = textarea.value.length;
-                    else lineEnd = end + lineEnd;
+                    const cursorOffsetInLine = start - lineStart;
                     textarea.value = textarea.value.substring(0, lineStart) + INDENT + textarea.value.substring(lineStart);
-                    textarea.selectionStart = textarea.selectionEnd = start + INDENT.length;
+                    const newCursorPos = lineStart + INDENT.length + cursorOffsetInLine;
+                    textarea.selectionStart = textarea.selectionEnd = newCursorPos;
                 } else {
                     const selected = textarea.value.substring(start, end);
                     const lines = selected.split('\n');
@@ -1342,6 +1436,7 @@
                     textarea.selectionStart = start;
                     textarea.selectionEnd = start + newText.length;
                 }
+
                 textarea.focus();
                 render();
                 clearTimeout(saveTimer);
@@ -1417,6 +1512,7 @@
             modalBody.innerHTML = fullSpec;
             loadExample();
             setTheme('d');
+            applyMargins();
 
             themeSelector.addEventListener('change', function(e) { setTheme(e.target.value); });
 
