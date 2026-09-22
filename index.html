@@ -680,8 +680,8 @@
                 <span class="separator"></span>
                 <label>技能分栏</label>
                 <select id="skillsSplitSelect" onchange="setSkillsSplit()">
-                    <option value="true" selected>左右拆分</option>
-                    <option value="false">不拆分</option>
+                    <option value="false" selected>不拆分</option>
+                    <option value="true">左右拆分</option>
                 </select>
             </div>
 
@@ -694,7 +694,7 @@
                 <span class="theme-indicator" id="themeIndicator">主题 D</span>
             </div>
             <div id="preview-scroll">
-                <div id="resume-page" data-theme="d" data-photo="false" data-align="center" data-skills-split="true">
+                <div id="resume-page" data-theme="d" data-photo="false" data-align="center" data-skills-split="false">
                     <div id="resume-content"></div>
                 </div>
             </div>
@@ -890,9 +890,7 @@
                 <div class="note">
                     <strong>特殊版块：</strong><br>
                     • <strong>教育背景</strong>的列表项自动无符号、顶格显示<br>
-                    • <strong>技能背景</strong>可在工具栏选择「左右拆分」或「不拆分」<br>
-                    &nbsp;&nbsp;- 左右拆分：6:4 两栏排列，适合短内容<br>
-                    &nbsp;&nbsp;- 不拆分：普通单栏列表，适合长内容
+                    • <strong>技能背景</strong>可在工具栏选择「左右拆分」或「不拆分」
                 </div>
 
                 <h3>五、加粗和斜体</h3>
@@ -1065,7 +1063,8 @@
                 if (rect.width === 0) return;
                 const mmToPx = rect.width / 210;
 
-                const safeMarginMm = 14;
+                // ===== 安全余量：从 14mm 降到 6mm，更贴近实际打印 =====
+                const safeMarginMm = 6;
                 const pageHeightPx = (297 - safeMarginMm) * mmToPx;
                 const effectiveHeight = pageHeightPx - (paddingTop + paddingBottom) * mmToPx;
 
@@ -1240,6 +1239,7 @@
                 });
             };
 
+            // ===== 最新版示例内容 =====
             const exampleContent = trimLines(`
                 # 陈思远
                 电话: 139-8888-1234 | 邮箱: siyuan.chen@outlook.com | 地址: 杭州
@@ -1247,39 +1247,52 @@
 
                 # 教育背景
                 ## University of Cambridge | Master of Philosophy in Data Science | Oct 2023 – Sep 2024
-                - 研究方向：机器学习与因果推断
-                + GPA: 3.9/4.0
+                - 研究方向：机器学习、因果推断、实验设计，毕业论文获系优秀论文提名
+                + GPA: 3.9/4.0，核心课程：Statistical Learning、Causal Inference、Bayesian Methods
                 ## London School of Economics | Bachelor of Science in Economics | Sep 2019 – Jun 2023
-                - 一等荣誉学位 (First Class Honours)
-                + 核心课程：计量经济学、行为经济学
-
-                # 校园经历
-                ## 剑桥中国学联 | 副主席 | Oct 2023 – Sep 2024
-                - 策划并执行 8 场学术讲座，累计参与 500+ 人次
-                - 统筹学联宣传矩阵，公众号粉丝增长 35%
-                ## LSE 经济学社 | 学术部部长 | Sep 2021 – Jun 2023
-                - 组织 12 场学术沙龙，邀请教授与业界嘉宾共 9 人
+                - 一等荣誉学位 (First Class Honours)，三年综合排名年级前 5%
+                + 核心课程：计量经济学、行为经济学、运筹学、博弈论
 
                 # 实习经历
                 ## McKinsey & Company | 战略咨询实习生 | Jun 2024 – Sep 2024
-                - 参与消费品牌数字化转型项目，协助完成市场调研与竞品分析
-                + 项目周期：3 个月，每周投入 40 小时
+                - 参与某头部消费品牌数字化转型项目，独立负责市场调研与竞品分析模块，完成 <strong>3 份</strong>行业洞察报告，为项目组提供关键决策依据
+                - 基于 Python 处理 <strong>10 万+</strong> 条销售流水数据，清洗、建模并输出可视化看板，帮助客户识别 <strong>5 个</strong>高潜增长细分市场
+                - 协助设计客户会员体系优化方案，通过 A/B 测试验证核心假设，推动试点门店复购率提升 <strong>18%</strong>
+                - 参与每周客户汇报会议，负责制作 PPT 并整理会议纪要，累计输出汇报材料 <strong>12 份</strong>
+                + 项目周期：3 个月，每周投入 5 天
                 ## L'Oréal China | 市场分析实习生 | Dec 2023 – Feb 2024
-                - 协助跟进 2024 年货节活动，参与定价策略与流量监测
-                - 利用 SQL 提取用户行为数据，输出周报驱动运营决策
+                - 协助跟进 2024 年货节活动，参与定价策略、流量监测与效果复盘，覆盖 <strong>6 个</strong>核心单品
+                - 利用 SQL 从数据仓库提取用户行为数据，分析加购、收藏、转化漏斗，输出周报 <strong>8 份</strong>驱动运营决策
+                - 搭建竞品价格监控表，跟踪 <strong>15 个</strong>竞品在天猫、京东、抖音三平台的促销机制，为定价团队提供每日更新
+                - 参与新品上市前的消费者调研问卷设计，回收有效问卷 <strong>1200+</strong> 份，输出洞察报告用于卖点提炼
+                + 项目成果：所负责品类年货节 GMV 同比增长 <strong>22%</strong>
+                ## 招商证券 | 行业研究实习生 | Jul 2022 – Sep 2022
+                - 覆盖消费品与零售赛道，协助撰写 <strong>3 份</strong>深度行业研究报告，单篇平均 <strong>30 页</strong>，累计引用数据源 <strong>40+</strong> 个
+                - 负责上市公司财务数据收集与更新，搭建财务预测模型，覆盖 <strong>20 家</strong>重点标的
+                - 参与电话会议与专家访谈 <strong>10 场</strong>，整理访谈纪要并提炼核心观点，为分析师提供研究支持
+                - 独立完成一篇行业专题《新消费浪潮下的国货崛起》被团队内部引用并作为客户路演材料
+                + 实习评级：优秀（Top 10%）
 
                 # 项目经历
                 ## Carbon Footprint Tracker App | 产品设计负责人 | Jan 2025 – Apr 2025
-                - 设计并开发碳足迹追踪工具，集成用户出行与消费数据
-                + 用户调研有效问卷 200+ 份
-                ## E-commerce Recommendation System | 项目成员 | Oct 2023 – Dec 2023
-                - 基于协同过滤与 LightGBM 构建电商推荐模型，AUC 达 0.87
+                - 主导从 0 到 1 设计并开发碳足迹追踪工具，覆盖用户出行、饮食、消费三大场景，集成 <strong>8 类</strong>数据源
+                - 完成用户调研与原型测试，累计收集有效问卷 <strong>200+</strong> 份，访谈用户 <strong>25 位</strong>，输出需求文档与产品路线图
+                - 设计核心算法将用户行为转换为碳排数据，并通过可视化图表呈现趋势对比与优化建议
+                - 产品上线内测版本，注册用户突破 <strong>800+</strong>，次日留存率达 <strong>42%</strong>，获学院创业孵化基金支持
+                + 团队规模：4 人；技术栈：Figma、React Native、Python
+
+                # 校园经历
+                ## 剑桥中国学联 | 副主席 | Oct 2023 – Sep 2024
+                - 统筹学联全年活动规划，主导策划并执行 <strong>8 场</strong>学术讲座与职业分享会，累计参与 <strong>500+</strong> 人次
+                - 统筹学联新媒体矩阵运营，重构内容发布节奏与选题方向，公众号粉丝增长 <strong>35%</strong>，单篇最高阅读量破 <strong>3000</strong>
+                - 搭建外部合作网络，对接企业、校友与校内社团 <strong>15+</strong> 家，为学联活动引入赞助资源
+                - 带领 10 人核心团队完成年度换届与传承，建立标准化活动 SOP 文档
 
                 # 技能背景
-                - 数据分析: Excel（数据透视表、VLOOKUP）、SPSS、Python
-                - 设计工具: Photoshop、Illustrator、Premiere、After Effects
-                - 办公工具: Word、PowerPoint
-                - 语言: 英语 IELTS 7.0，CET6 509
+                - 数据分析: Python（Pandas、NumPy、Scikit-learn）、SQL、R、SPSS、Tableau
+                - 机器学习: 回归分析、因果推断、协同过滤、LightGBM、A/B 测试
+                - 产品工具: Figma、Axure、Jira、Notion、Miro
+                - 语言能力: 中文（母语）、英语（IELTS 8.0，CET-6 580）
             `);
 
             window.loadExample = function() {
